@@ -1479,8 +1479,11 @@ def _render_calendar_event(game, cast_enabled=False):
         )
     actions_html = f'<span class="cal-actions">{" ".join(actions)}</span>' if actions else ""
 
+    home_abbr = _esc(game.get("home_abbr", ""))
+    away_abbr = _esc(game.get("away_abbr", ""))
+    league_key = _esc(game.get("league_key", ""))
     return {
-        "html": f"""<div class="cal-event{fav_class} cal-{state_class}" style="border-left-color: #{_esc(color)};">
+        "html": f"""<div class="cal-event{fav_class} cal-{state_class}" style="border-left-color: #{_esc(color)};" data-home-abbr="{home_abbr}" data-away-abbr="{away_abbr}" data-league="{league_key}">
   <span class="cal-league">{league}</span>
   <span class="cal-label">{label}{scores}{stream_icon}</span>
   <span class="cal-time">{_esc(game["time_display"])}</span>
@@ -1507,8 +1510,9 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     teams_data_js = json.dumps(all_teams or [], ensure_ascii=True).replace("</", "<\\/")
 
     # ── League list for settings panel ──
+    _league_sport_map = {lk: sport for lk, sport, _, _ in ALL_LEAGUES}
     all_league_keys_js = json.dumps([
-        {"key": li["key"], "name": li["display"]}
+        {"key": li["key"], "name": li["display"], "sport": _league_sport_map.get(li["key"], "")}
         for li in (league_info or [])
     ], ensure_ascii=True).replace("</", "<\\/")
 
@@ -2480,6 +2484,7 @@ function switchTab(name, evt) {
     var fallback = document.querySelector('.tab[onclick*="' + name + '"]');
     if (fallback) fallback.classList.add('active');
   }
+  if (name === 'calendar') highlightCalendar();
 }
 
 function toggleDetail(el, evt) {
@@ -2733,10 +2738,16 @@ function filterLeagues() {
       var cards = tierBucket[lk];
       var li = leagueInfoMap[lk];
       var lname = li ? li.name : lk.toUpperCase();
+      var sportIcons = {basketball:'🏀',football:'🏈','american-football':'🏈',baseball:'⚾',hockey:'🏒',soccer:'⚽',racing:'🏎'};
+      var icon = li && li.sport ? (sportIcons[li.sport] || '') : '';
 
       var label = document.createElement('div');
       label.className = 'league-label';
-      label.textContent = lname;
+      if (icon) {
+        label.innerHTML = '<span class="league-icon">' + icon + '</span> ' + lname;
+      } else {
+        label.textContent = lname;
+      }
       section.appendChild(label);
 
       var gridClass = tier === 'S' ? 'tier-s-grid' : tier === 'A' ? 'tier-a-grid' : 'tier-b-grid';
@@ -2818,10 +2829,20 @@ function loadPrefs() {
 function defaultPrefs() {
   var prefs = { teams: {S:[], A:[], B:[]}, leagues: {S:[], A:[], B:[]} };
   var defaults = window.CONFIG_DEFAULTS || {teams:{S:[],A:[],B:[]}, leagues:{S:[],A:[],B:[]}};
+  var ncaaTeamLeagues = ['college-football', 'mens-college-basketball', 'womens-college-basketball'];
   ['S','A','B'].forEach(function(t) {
-    prefs.teams[t] = (defaults.teams[t] || []).slice();
+    // Strip NCAA team entries — keep as league-level only
+    prefs.teams[t] = (defaults.teams[t] || []).filter(function(k) {
+      var lk = k.split(':')[1] || '';
+      return ncaaTeamLeagues.indexOf(lk) === -1;
+    });
     prefs.leagues[t] = (defaults.leagues[t] || []).slice();
   });
+  // Ensure mens-college-basketball is in A as a league (not individual teams)
+  var allLeagueTiers = prefs.leagues.S.concat(prefs.leagues.A).concat(prefs.leagues.B);
+  if (allLeagueTiers.indexOf('mens-college-basketball') === -1) {
+    prefs.leagues.A.push('mens-college-basketball');
+  }
   return prefs;
 }
 
@@ -3050,10 +3071,36 @@ function renderTierZones() {
   });
 }
 
+function highlightCalendar() {
+  var prefs = loadPrefs();
+  var teamTier = {};
+  ['S','A','B'].forEach(function(t) {
+    (prefs.teams[t]||[]).forEach(function(k){ teamTier[k] = t; });
+  });
+  var leagueTier = {};
+  ['S','A','B'].forEach(function(t) {
+    (prefs.leagues[t]||[]).forEach(function(k){ leagueTier[k] = t; });
+  });
+  document.querySelectorAll('#tab-calendar .cal-event').forEach(function(el) {
+    var lk = el.getAttribute('data-league') || '';
+    var home = el.getAttribute('data-home-abbr') || '';
+    var away = el.getAttribute('data-away-abbr') || '';
+    var inTier = teamTier[home + ':' + lk] || teamTier[away + ':' + lk] || leagueTier[lk];
+    if (inTier) {
+      el.classList.add('cal-fav');
+      el.style.borderLeftColor = inTier === 'S' ? 'var(--accent-s)' : inTier === 'A' ? 'var(--accent-a)' : 'var(--accent-b)';
+    } else {
+      el.classList.remove('cal-fav');
+      el.style.borderLeftColor = '#93a1a1';
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   renderTeamSearch();
   renderTierZones();
   filterLeagues();
+  highlightCalendar();
   startLiveScorePolling();
 });
 
