@@ -2640,7 +2640,7 @@ function renderTeamSearch() {
       '<span class="team-search-name">' + t.name + '</span>' +
       '<span class="team-search-league">' + t.leagueName + '</span>' +
       '<button class="team-search-add' + (added ? ' added' : '') + '" ' +
-        'onclick="addTeam(' + JSON.stringify(key) + ',\'B\')" ' +
+        'onclick="addTeam(' + JSON.stringify(key) + ',&quot;B&quot;)" ' +
         (added ? 'disabled' : '') + '>' +
         (added ? '✓' : '+ Add') +
       '</button>' +
