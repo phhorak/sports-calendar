@@ -1,0 +1,127 @@
+timezone: "America/Los_Angeles"
+refresh_interval: 300
+show_logos: true
+best_stream_resolve:
+  enabled: true
+  timeout_sec: 4
+  settle_ms: 900
+  max_matches: 4
+cast:
+  enabled: true
+  device_name: "Smart TV Pro"
+  server_host: "127.0.0.1"
+  server_port: 8765
+  resolve_timeout: 20
+  source_probe_limit: 4
+  use_browser_rank: true
+  browser_timeout: 10
+  browser_executable: "/usr/bin/chromium-browser"
+  use_browser_extract: true
+  browser_extract_limit: 3
+
+# Each rule assigns games to a tier. Evaluated top-to-bottom; first match wins.
+# Games that match no rule are not shown.
+#
+# Fields:
+#   tier:        S, A, or B (controls ordering + visual size on the page)
+#   league:      key from league_map below
+#   teams:       (optional) list of ESPN team abbreviations — game must involve one
+#   season:      (optional) "regular" or "postseason"
+#   event_types: (optional, F1 only) list of session types to include
+
+rules:
+  # ── Tier S: Must Watch ─────────────────────────────────
+  - tier: S
+    league: nfl
+    teams: [PHI]
+    season: postseason
+
+  - tier: S
+    league: nba
+    teams: [PHI]
+
+  - tier: S
+    league: fifa.friendly
+    teams: [AUT]
+  - tier: S
+    league: fifa.worldq.uefa
+    teams: [AUT]
+  - tier: S
+    league: uefa.nations
+    teams: [AUT]
+  - tier: S
+    league: fifa.world
+    teams: [AUT]
+  - tier: S
+    league: uefa.euro
+    teams: [AUT]
+
+  # ── Tier A ─────────────────────────────────────────────
+  - tier: A
+    league: nfl
+    season: regular
+
+  - tier: A
+    league: nba
+    season: postseason
+
+  - tier: A
+    league: mens-college-basketball
+    season: postseason
+
+  - tier: A
+    league: college-football
+    season: postseason
+
+  - tier: A
+    league: mlb
+    teams: [PHI]
+
+  # ── Tier B ─────────────────────────────────────────────
+  - tier: B
+    league: nhl
+    teams: [PHI]
+
+  - tier: B
+    league: nba
+
+  - tier: B
+    league: wnba
+    
+  - tier: B
+    league: aut.1
+    teams: [VIE]
+
+  - tier: B
+    league: f1
+    event_types: [Qual, Sprint, Race]
+
+  - tier: B
+    league: cfl
+    teams: [BCL]
+
+  - tier: B
+    league: college-football
+    teams: [UGA, ALA, OSU, TEX, USC, CLEM, LSU, MICH, ND, OU, PSU, FLA]
+
+  - tier: B
+    league: mens-college-basketball
+    teams: [DUKE, UNC, UK, KU, GONZ, CONN, ARIZ, HALL, MARQ, VILL, PUR]
+
+# Maps league keys to ESPN API sport/league path segments
+league_map:
+  nfl:                      { sport: football,   league: nfl }
+  nba:                      { sport: basketball, league: nba }
+  wnba:                     { sport: basketball, league: wnba }
+  mlb:                      { sport: baseball,   league: mlb }
+  nhl:                      { sport: hockey,     league: nhl }
+  cfl:                      { sport: football,   league: cfl }
+  mens-college-basketball:  { sport: basketball, league: mens-college-basketball }
+  college-football:         { sport: football,   league: college-football }
+  f1:                       { sport: racing,     league: f1 }
+  aut.1:                    { sport: soccer,     league: aut.1 }
+  fifa.friendly:            { sport: soccer,     league: fifa.friendly }
+  fifa.worldq.uefa:         { sport: soccer,     league: fifa.worldq.uefa }
+  fifa.world:               { sport: soccer,     league: fifa.world }
+  uefa.euro:                { sport: soccer,     league: uefa.euro }
+  uefa.nations:             { sport: soccer,     league: uefa.nations }
