@@ -2827,23 +2827,11 @@ function loadPrefs() {
 }
 
 function defaultPrefs() {
-  var prefs = { teams: {S:[], A:[], B:[]}, leagues: {S:[], A:[], B:[]} };
   var defaults = window.CONFIG_DEFAULTS || {teams:{S:[],A:[],B:[]}, leagues:{S:[],A:[],B:[]}};
-  var ncaaTeamLeagues = ['college-football', 'mens-college-basketball', 'womens-college-basketball'];
-  ['S','A','B'].forEach(function(t) {
-    // Strip NCAA team entries — keep as league-level only
-    prefs.teams[t] = (defaults.teams[t] || []).filter(function(k) {
-      var lk = k.split(':')[1] || '';
-      return ncaaTeamLeagues.indexOf(lk) === -1;
-    });
-    prefs.leagues[t] = (defaults.leagues[t] || []).slice();
-  });
-  // Ensure mens-college-basketball is in A as a league (not individual teams)
-  var allLeagueTiers = prefs.leagues.S.concat(prefs.leagues.A).concat(prefs.leagues.B);
-  if (allLeagueTiers.indexOf('mens-college-basketball') === -1) {
-    prefs.leagues.A.push('mens-college-basketball');
-  }
-  return prefs;
+  return {
+    teams:   {S: (defaults.teams.S||[]).slice(),   A: (defaults.teams.A||[]).slice(),   B: (defaults.teams.B||[]).slice()},
+    leagues: {S: (defaults.leagues.S||[]).slice(), A: (defaults.leagues.A||[]).slice(), B: (defaults.leagues.B||[]).slice()}
+  };
 }
 
 function savePrefs(prefs) {
