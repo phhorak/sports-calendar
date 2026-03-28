@@ -1453,13 +1453,13 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
                     "league": g["league_key"],
                     "leagueName": g.get("league_name", g["league_key"]),
                 }
-    teams_data_js = json.dumps(list(_seen_teams.values()), ensure_ascii=False)
+    teams_data_js = json.dumps(list(_seen_teams.values()), ensure_ascii=True).replace("</", "<\\/")
 
     # ── League list for settings panel ──
     all_league_keys_js = json.dumps([
         {"key": li["key"], "name": li["display"]}
         for li in (league_info or [])
-    ], ensure_ascii=False)
+    ], ensure_ascii=True).replace("</", "<\\/")
 
     # ── Dashboard tab ──
     def group_by_league(games):
