@@ -1228,6 +1228,7 @@ def _extract_competition(comp, event, league_key, sport, league_name,
         "espn_boxscore": espn_boxscore,
         "espn_standings": espn_standings,
         "stream_url": None,
+        "event_id": event_id,
     }
 
 
@@ -1337,16 +1338,16 @@ def _render_large(game, show_logos, cast_enabled):
     logo_home = _logo_img(game["home_logo"], game["home_abbr"], 32) if show_logos else ""
 
     show_score = game["state"] != "pre"
-    score_away = f'<span class="score">{_esc(game["away_score"])}</span>' if show_score and game["away_score"] else ""
-    score_home = f'<span class="score">{_esc(game["home_score"])}</span>' if show_score and game["home_score"] else ""
+    score_away = f'<span class="score score-away">{_esc(game["away_score"])}</span>' if show_score and game["away_score"] else '<span class="score score-away" style="display:none"></span>'
+    score_home = f'<span class="score score-home">{_esc(game["home_score"])}</span>' if show_score and game["home_score"] else '<span class="score score-home" style="display:none"></span>'
 
     broadcast = f'<span class="broadcast">{_esc(game["broadcast"])}</span>' if game["broadcast"] else ""
     event_type = f'<span class="event-type">{_esc(game["event_type"])}</span>' if game["event_type"] else ""
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-orig-tier="S" style="{border_style}" onclick="toggleDetail(this, event)">
-  <div class="game-status">{_state_indicator(game["state"])} {_esc(game["time_display"])} {broadcast} {event_type}</div>
+    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-orig-tier="S" style="{border_style}" onclick="toggleDetail(this, event)">
+  <div class="game-status"><span class="status-text">{_state_indicator(game["state"])} {_esc(game["time_display"])}</span> {broadcast} {event_type}</div>
   <div class="team-row">
     {logo_away}
     <span class="team-name">{_esc(game["away_name"])}</span>
@@ -1373,15 +1374,17 @@ def _render_medium(game, show_logos, cast_enabled):
 
     scores = ""
     if game["state"] != "pre" and (game["away_score"] or game["home_score"]):
-        scores = f'{_esc(game["away_score"])} - {_esc(game["home_score"])}'
+        scores = f'<span class="score-away">{_esc(game["away_score"])}</span> - <span class="score-home">{_esc(game["home_score"])}</span>'
+    else:
+        scores = '<span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span>'
 
     broadcast = f' &middot; {_esc(game["broadcast"])}' if game["broadcast"] else ""
     event_type = f' &middot; {_esc(game["event_type"])}' if game["event_type"] else ""
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-orig-tier="A" style="{border_style}" onclick="toggleDetail(this, event)">
-  <div class="medium-status">{_state_indicator(game["state"])} {_esc(game["time_display"])}{broadcast}{event_type}</div>
+    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-orig-tier="A" style="{border_style}" onclick="toggleDetail(this, event)">
+  <div class="medium-status"><span class="status-text">{_state_indicator(game["state"])} {_esc(game["time_display"])}</span>{broadcast}{event_type}</div>
   <div class="medium-matchup">
     {logo_away} <span class="abbr">{_esc(game["away_abbr"])}</span>
     <span class="record-sm">{_esc(game["away_record"])}</span>
@@ -1399,7 +1402,9 @@ def _render_compact(game, show_logos, cast_enabled):
 
     scores = ""
     if game["state"] != "pre" and (game["away_score"] or game["home_score"]):
-        scores = f'{_esc(game["away_score"])}-{_esc(game["home_score"])}'
+        scores = f'<span class="score-away">{_esc(game["away_score"])}</span>-<span class="score-home">{_esc(game["home_score"])}</span>'
+    else:
+        scores = '<span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span>'
 
     broadcast = _esc(game["broadcast"]) if game["broadcast"] else ""
     event_type = _esc(game["event_type"]) if game["event_type"] else ""
@@ -1407,8 +1412,8 @@ def _render_compact(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status">{_state_indicator(game["state"])}{_esc(game["time_display"])}</span>
+    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text">{_state_indicator(game["state"])}{_esc(game["time_display"])}</span></span>
   <span class="compact-matchup">{_esc(game["away_abbr"])} @ {_esc(game["home_abbr"])}</span>
   <span class="compact-score">{scores}</span>
   <span class="compact-extra">{extra}</span>
@@ -1661,7 +1666,7 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
                 else:
                     extra_cards.append(_render_compact(g, show_logos, cast_enabled))
             extra_cards.append('</div>')
-        extra_html = '<section class="tier-section tier-extra" id="extra-games" style="display:none;">' + "\n".join(extra_cards) + '</section>'
+        extra_html = '<section class="tier-section tier-extra" id="extra-games" data-extra="1" style="display:none;">' + "\n".join(extra_cards) + '</section>'
 
     # ── Sidebar ──
     sidebar_items = []
@@ -2640,9 +2645,11 @@ function _extractAllCards() {
   var dashboard = document.getElementById('tab-dashboard');
   if (!dashboard) return;
   _origDashboard = dashboard.innerHTML;
-  // Collect every game card (has data-league)
+  // Collect every game card (has data-league); mark extra section cards
   dashboard.querySelectorAll('[data-league]').forEach(function(el) {
-    _allCards.push(el.cloneNode(true));
+    var clone = el.cloneNode(true);
+    if (el.closest('[data-extra]')) clone.setAttribute('data-extra', '1');
+    _allCards.push(clone);
   });
 }
 
@@ -2690,8 +2697,11 @@ function filterLeagues() {
     var away = card.getAttribute('data-away-abbr') || '';
     var tier;
 
+    // Never show extra-section cards in My View
+    if (card.getAttribute('data-extra')) return;
+
     if (!hasPrefs) {
-      // No prefs: use original Python tier (stored as data-orig-tier we'll set below)
+      // No prefs: use original Python tier
       tier = card.getAttribute('data-orig-tier') || 'B';
     } else {
       // Team pref takes priority over league pref
@@ -3044,7 +3054,76 @@ document.addEventListener('DOMContentLoaded', function() {
   renderTeamSearch();
   renderTierZones();
   filterLeagues();
+  startLiveScorePolling();
 });
+
+// ── Live score polling ───────────────────────────────────────────
+
+function startLiveScorePolling() {
+  pollLiveScores();
+  setInterval(pollLiveScores, 30000);
+}
+
+function pollLiveScores() {
+  // Collect unique leagues that have live or upcoming games in the DOM
+  var leagueSet = {};
+  document.querySelectorAll('[data-game-id][data-sport]').forEach(function(card) {
+    var lk = card.getAttribute('data-league');
+    var sport = card.getAttribute('data-sport');
+    if (lk && sport && !leagueSet[lk]) leagueSet[lk] = sport;
+  });
+
+  Object.keys(leagueSet).forEach(function(lk) {
+    var sport = leagueSet[lk];
+    var url = 'https://site.api.espn.com/apis/site/v2/sports/' + sport + '/' + lk + '/scoreboard';
+    fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+      applyLiveScores(data.events || []);
+    }).catch(function(){});
+  });
+}
+
+function applyLiveScores(events) {
+  events.forEach(function(ev) {
+    var gameId = ev.id;
+    var cards = document.querySelectorAll('[data-game-id="' + gameId + '"]');
+    if (!cards.length) return;
+
+    var comp = (ev.competitions || [])[0];
+    if (!comp) return;
+
+    var statusType = (comp.status || {}).type || {};
+    var state = statusType.state || 'pre';
+    var detail = statusType.shortDetail || '';
+
+    var competitors = comp.competitors || [];
+    var home = competitors.find(function(c){ return c.homeAway === 'home'; }) || {};
+    var away = competitors.find(function(c){ return c.homeAway === 'away'; }) || {};
+    var homeScore = (home.score !== undefined && home.score !== null) ? String(home.score) : '';
+    var awayScore = (away.score !== undefined && away.score !== null) ? String(away.score) : '';
+
+    cards.forEach(function(card) {
+      // Update state attribute
+      card.setAttribute('data-state', state);
+
+      // Update status text
+      var statusEl = card.querySelector('.status-text');
+      if (statusEl) {
+        var dot = state === 'in' ? '<span class="state-dot live"></span> '
+                : state === 'post' ? '<span class="state-dot final"></span> '
+                : '<span class="state-dot"></span> ';
+        statusEl.innerHTML = dot + detail;
+      }
+
+      // Update scores
+      if (state !== 'pre' && (homeScore || awayScore)) {
+        var awayEl = card.querySelector('.score-away');
+        var homeEl = card.querySelector('.score-home');
+        if (awayEl) { awayEl.textContent = awayScore; awayEl.style.display = ''; }
+        if (homeEl) { homeEl.textContent = homeScore; homeEl.style.display = ''; }
+      }
+    });
+  });
+}
 """
 
 
