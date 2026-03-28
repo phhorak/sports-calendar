@@ -1461,6 +1461,27 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
         for li in (league_info or [])
     ], ensure_ascii=True).replace("</", "<\\/")
 
+    # ── Config defaults for settings panel pre-seed ──
+    _default_teams = {"S": [], "A": [], "B": []}
+    _default_leagues = {"S": [], "A": [], "B": []}
+    _seen_team_keys = set()
+    for rule in config.get("rules", []):
+        tier = rule.get("tier", "B")
+        lk = rule.get("league", "")
+        teams = rule.get("teams", [])
+        if teams:
+            for abbr in teams:
+                key = f"{abbr}:{lk}"
+                if key not in _seen_team_keys:
+                    _seen_team_keys.add(key)
+                    _default_teams.setdefault(tier, []).append(key)
+        else:
+            if lk and lk not in sum(_default_leagues.values(), []):
+                _default_leagues.setdefault(tier, []).append(lk)
+    config_defaults_js = json.dumps(
+        {"teams": _default_teams, "leagues": _default_leagues}, ensure_ascii=True
+    ).replace("</", "<\\/")
+
     # ── Dashboard tab ──
     def group_by_league(games):
         groups = []
@@ -1625,13 +1646,41 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
 <div class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-tabs">
-      <button class="sidebar-tab active" onclick="switchSidebarTab('leagues', this)">Leagues</button>
-      <button class="sidebar-tab" onclick="switchSidebarTab('settings', this)">Settings</button>
+      <button class="sidebar-tab active" onclick="switchSidebarTab('favorites', this)">Favorites</button>
+      <button class="sidebar-tab" onclick="switchSidebarTab('leagues', this)">Leagues</button>
     </div>
     <button class="sidebar-close" onclick="toggleSidebar()">&times;</button>
   </div>
 
-  <div class="sidebar-panel" id="sidebar-panel-leagues">
+  <div class="sidebar-panel" id="sidebar-panel-favorites">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Favorite Teams</div>
+      <input class="settings-search" id="team-search" type="text" placeholder="Search teams..." oninput="renderTeamSearch()">
+      <div class="team-search-results" id="team-search-results"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Tiers &mdash; Teams</div>
+      <div class="tier-label tier-s-label">S</div>
+      <div class="tier-drop-zone" id="tier-teams-S" ondragover="event.preventDefault()" ondrop="dropTeam(event,'S')"></div>
+      <div class="tier-label tier-a-label">A</div>
+      <div class="tier-drop-zone" id="tier-teams-A" ondragover="event.preventDefault()" ondrop="dropTeam(event,'A')"></div>
+      <div class="tier-label tier-b-label">B</div>
+      <div class="tier-drop-zone" id="tier-teams-B" ondragover="event.preventDefault()" ondrop="dropTeam(event,'B')"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Tiers &mdash; Leagues</div>
+      <div class="tier-label tier-s-label">S</div>
+      <div class="tier-drop-zone" id="tier-leagues-S" ondragover="event.preventDefault()" ondrop="dropLeague(event,'S')"></div>
+      <div class="tier-label tier-a-label">A</div>
+      <div class="tier-drop-zone" id="tier-leagues-A" ondragover="event.preventDefault()" ondrop="dropLeague(event,'A')"></div>
+      <div class="tier-label tier-b-label">B</div>
+      <div class="tier-drop-zone" id="tier-leagues-B" ondragover="event.preventDefault()" ondrop="dropLeague(event,'B')"></div>
+      <div class="tier-label" style="color:var(--text-dim)">Unassigned</div>
+      <div class="tier-drop-zone tier-unassigned" id="tier-leagues-none" ondragover="event.preventDefault()" ondrop="dropLeague(event,'none')"></div>
+    </div>
+  </div>
+
+  <div class="sidebar-panel" id="sidebar-panel-leagues" style="display:none">
     <div class="sidebar-section">
       <div class="sidebar-section-label">My Leagues</div>
       {chr(10).join(s for s, li in zip(sidebar_items, league_info or []) if li.get("mine"))}
@@ -1639,34 +1688,6 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     <div class="sidebar-section">
       <div class="sidebar-section-label">Other Leagues</div>
       {chr(10).join(s for s, li in zip(sidebar_items, league_info or []) if not li.get("mine"))}
-    </div>
-  </div>
-
-  <div class="sidebar-panel" id="sidebar-panel-settings" style="display:none">
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">Favorite Teams</div>
-      <input class="settings-search" id="team-search" type="text" placeholder="Search teams..." oninput="renderTeamSearch()">
-      <div class="team-search-results" id="team-search-results"></div>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">My Tiers — Teams</div>
-      <div class="tier-label tier-s-label">S</div>
-      <div class="tier-drop-zone" id="tier-teams-S" data-tier="S" ondragover="event.preventDefault()" ondrop="dropTeam(event,'S')"></div>
-      <div class="tier-label tier-a-label">A</div>
-      <div class="tier-drop-zone" id="tier-teams-A" data-tier="A" ondragover="event.preventDefault()" ondrop="dropTeam(event,'A')"></div>
-      <div class="tier-label tier-b-label">B</div>
-      <div class="tier-drop-zone" id="tier-teams-B" data-tier="B" ondragover="event.preventDefault()" ondrop="dropTeam(event,'B')"></div>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">My Tiers — Leagues</div>
-      <div class="tier-label tier-s-label">S</div>
-      <div class="tier-drop-zone" id="tier-leagues-S" data-tier="S" ondragover="event.preventDefault()" ondrop="dropLeague(event,'S')"></div>
-      <div class="tier-label tier-a-label">A</div>
-      <div class="tier-drop-zone" id="tier-leagues-A" data-tier="A" ondragover="event.preventDefault()" ondrop="dropLeague(event,'A')"></div>
-      <div class="tier-label tier-b-label">B</div>
-      <div class="tier-drop-zone" id="tier-leagues-B" data-tier="B" ondragover="event.preventDefault()" ondrop="dropLeague(event,'B')"></div>
-      <div class="tier-label" style="color:var(--text-dim)">Unassigned</div>
-      <div class="tier-drop-zone tier-unassigned" id="tier-leagues-none" ondragover="event.preventDefault()" ondrop="dropLeague(event,'none')"></div>
     </div>
   </div>
 </div>
@@ -1710,6 +1731,7 @@ window.CAST_CONFIG = {{
 }};
 window.ALL_TEAMS = {teams_data_js};
 window.ALL_LEAGUES_LIST = {all_league_keys_js};
+window.CONFIG_DEFAULTS = {config_defaults_js};
 {JS}
 </script>
 </body>
@@ -2151,8 +2173,8 @@ h1 {
 .sidebar {
   position: fixed;
   top: 0;
-  left: -280px;
-  width: 270px;
+  left: -360px;
+  width: 340px;
   height: 100vh;
   background: var(--bg);
   border-right: 1px solid var(--border);
@@ -2589,11 +2611,10 @@ function switchSidebarTab(name, btn) {
   document.querySelectorAll('.sidebar-panel').forEach(function(p) { p.style.display = 'none'; });
   btn.classList.add('active');
   document.getElementById('sidebar-panel-' + name).style.display = '';
-  if (name === 'settings') initSettings();
 }
 
-// localStorage prefs schema: { teams: {S:[...], A:[...], B:[...]}, leagues: {S:[...], A:[...], B:[...]} }
-// team keys are "ABBR:league_key", league keys are league_key strings
+// localStorage prefs: { teams: {S:[...], A:[...], B:[...]}, leagues: {S:[...], A:[...], B:[...]} }
+// team keys: "ABBR:league_key"
 
 function loadPrefs() {
   try {
@@ -2603,20 +2624,40 @@ function loadPrefs() {
       if (p && p.teams && p.leagues) return p;
     }
   } catch(e) {}
-  return { teams: {S:[], A:[], B:[]}, leagues: {S:[], A:[], B:[]} };
+  // Seed from config defaults on first load
+  var prefs = { teams: {S:[], A:[], B:[]}, leagues: {S:[], A:[], B:[]} };
+  var defaults = window.CONFIG_DEFAULTS || {teams:{S:[],A:[],B:[]}, leagues:{S:[],A:[],B:[]}};
+  ['S','A','B'].forEach(function(t) {
+    prefs.teams[t] = (defaults.teams[t] || []).slice();
+    prefs.leagues[t] = (defaults.leagues[t] || []).slice();
+  });
+  savePrefs(prefs);
+  return prefs;
 }
 
 function savePrefs(prefs) {
   localStorage.setItem('sports_prefs', JSON.stringify(prefs));
 }
 
-function initSettings() {
-  renderTeamSearch();
-  renderTierZones();
-}
+// Event delegation for team search results (avoids inline onclick quote issues)
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.team-search-add:not([disabled])');
+  if (btn) {
+    var key = btn.getAttribute('data-key');
+    if (key) addTeam(key, 'B');
+  }
+  var rem = e.target.closest('.tier-chip-remove');
+  if (rem) {
+    var type = rem.getAttribute('data-type');
+    var key2 = rem.getAttribute('data-key');
+    if (type === 'team') removeTeam(key2);
+    else if (type === 'league') removeLeague(key2);
+  }
+});
 
 function renderTeamSearch() {
-  var q = (document.getElementById('team-search').value || '').toLowerCase().trim();
+  var input = document.getElementById('team-search');
+  var q = input ? input.value.toLowerCase().trim() : '';
   var prefs = loadPrefs();
   var allAdded = new Set();
   ['S','A','B'].forEach(function(t) { (prefs.teams[t]||[]).forEach(function(k){ allAdded.add(k); }); });
@@ -2628,31 +2669,31 @@ function renderTeamSearch() {
                t.name.toLowerCase().includes(q) ||
                t.leagueName.toLowerCase().includes(q);
       })
-    : teams.slice(0, 30);
+    : teams.slice(0, 40);
 
   var html = '';
   filtered.forEach(function(t) {
     var key = t.abbr + ':' + t.league;
     var added = allAdded.has(key);
-    var img = t.logo ? '<img src="' + t.logo + '" alt="">' : '<span style="width:18px;display:inline-block"></span>';
+    var img = t.logo
+      ? '<img src="' + t.logo + '" alt="" width="18" height="18" style="object-fit:contain">'
+      : '<span style="width:18px;display:inline-block"></span>';
     html += '<div class="team-search-row">' +
       img +
       '<span class="team-search-name">' + t.name + '</span>' +
       '<span class="team-search-league">' + t.leagueName + '</span>' +
-      '<button class="team-search-add' + (added ? ' added' : '') + '" ' +
-        'onclick="addTeam(' + JSON.stringify(key) + ',&quot;B&quot;)" ' +
-        (added ? 'disabled' : '') + '>' +
-        (added ? '✓' : '+ Add') +
+      '<button class="team-search-add' + (added ? ' added' : '') + '" data-key="' + key + '"' + (added ? ' disabled' : '') + '>' +
+        (added ? '&#10003;' : '+ Add') +
       '</button>' +
     '</div>';
   });
   if (!html) html = '<div style="font-size:0.75rem;color:var(--text-dim);padding:4px">No teams found</div>';
-  document.getElementById('team-search-results').innerHTML = html;
+  var el = document.getElementById('team-search-results');
+  if (el) el.innerHTML = html;
 }
 
 function addTeam(key, tier) {
   var prefs = loadPrefs();
-  // Remove from all tiers first
   ['S','A','B'].forEach(function(t) {
     prefs.teams[t] = (prefs.teams[t]||[]).filter(function(k){ return k !== key; });
   });
@@ -2689,6 +2730,7 @@ var _dragLeague = null;
 
 function dragTeamStart(evt, key) {
   _dragTeam = key;
+  _dragLeague = null;
   evt.dataTransfer.effectAllowed = 'move';
 }
 
@@ -2697,11 +2739,11 @@ function dropTeam(evt, tier) {
   if (!_dragTeam) return;
   addTeam(_dragTeam, tier);
   _dragTeam = null;
-  document.querySelectorAll('.tier-drop-zone').forEach(function(z){ z.classList.remove('drag-over'); });
 }
 
 function dragLeagueStart(evt, key) {
   _dragLeague = key;
+  _dragTeam = null;
   evt.dataTransfer.effectAllowed = 'move';
 }
 
@@ -2728,24 +2770,37 @@ function renderTierZones() {
   var teamMap = {};
   (window.ALL_TEAMS || []).forEach(function(t){ teamMap[t.abbr + ':' + t.league] = t; });
 
-  // Teams
   ['S','A','B'].forEach(function(tier) {
     var zone = document.getElementById('tier-teams-' + tier);
     if (!zone) return;
-    var html = '';
+    zone.innerHTML = '';
     (prefs.teams[tier]||[]).forEach(function(key) {
       var t = teamMap[key];
       if (!t) return;
-      var img = t.logo ? '<img src="' + t.logo + '" alt="">' : '';
-      html += '<div class="tier-chip" draggable="true" ondragstart="dragTeamStart(event,' + JSON.stringify(key) + ')">' +
-        img + t.abbr +
-        '<button class="tier-chip-remove" onclick="removeTeam(' + JSON.stringify(key) + ')" title="Remove">&times;</button>' +
-      '</div>';
+      var chip = document.createElement('div');
+      chip.className = 'tier-chip';
+      chip.draggable = true;
+      chip.dataset.key = key;
+      chip.dataset.dtype = 'team';
+      chip.addEventListener('dragstart', function(e) { dragTeamStart(e, key); });
+      if (t.logo) {
+        var img = document.createElement('img');
+        img.src = t.logo; img.width = 14; img.height = 14;
+        img.style.objectFit = 'contain';
+        chip.appendChild(img);
+      }
+      chip.appendChild(document.createTextNode(t.abbr));
+      var rm = document.createElement('button');
+      rm.className = 'tier-chip-remove';
+      rm.title = 'Remove';
+      rm.setAttribute('data-type', 'team');
+      rm.setAttribute('data-key', key);
+      rm.innerHTML = '&times;';
+      chip.appendChild(rm);
+      zone.appendChild(chip);
     });
-    zone.innerHTML = html;
   });
 
-  // Leagues
   var allLeagues = window.ALL_LEAGUES_LIST || [];
   var assignedLeagues = new Set();
   ['S','A','B'].forEach(function(t){ (prefs.leagues[t]||[]).forEach(function(k){ assignedLeagues.add(k); }); });
@@ -2753,32 +2808,40 @@ function renderTierZones() {
   ['S','A','B'].forEach(function(tier) {
     var zone = document.getElementById('tier-leagues-' + tier);
     if (!zone) return;
-    var html = '';
+    zone.innerHTML = '';
     (prefs.leagues[tier]||[]).forEach(function(key) {
       var league = allLeagues.find(function(l){ return l.key === key; });
       var name = league ? league.name : key;
-      html += '<div class="tier-chip" draggable="true" ondragstart="dragLeagueStart(event,' + JSON.stringify(key) + ')">' +
-        name +
-        '<button class="tier-chip-remove" onclick="removeLeague(' + JSON.stringify(key) + ')" title="Remove">&times;</button>' +
-      '</div>';
+      var chip = document.createElement('div');
+      chip.className = 'tier-chip';
+      chip.draggable = true;
+      chip.addEventListener('dragstart', function(e) { dragLeagueStart(e, key); });
+      chip.appendChild(document.createTextNode(name));
+      var rm = document.createElement('button');
+      rm.className = 'tier-chip-remove';
+      rm.title = 'Remove';
+      rm.setAttribute('data-type', 'league');
+      rm.setAttribute('data-key', key);
+      rm.innerHTML = '&times;';
+      chip.appendChild(rm);
+      zone.appendChild(chip);
     });
-    zone.innerHTML = html;
   });
 
-  // Unassigned leagues
   var unassignedZone = document.getElementById('tier-leagues-none');
   if (unassignedZone) {
-    var html = '';
+    unassignedZone.innerHTML = '';
     allLeagues.forEach(function(league) {
       if (assignedLeagues.has(league.key)) return;
-      html += '<div class="tier-chip" draggable="true" ondragstart="dragLeagueStart(event,' + JSON.stringify(league.key) + ')">' +
-        league.name +
-      '</div>';
+      var chip = document.createElement('div');
+      chip.className = 'tier-chip';
+      chip.draggable = true;
+      chip.addEventListener('dragstart', function(e) { dragLeagueStart(e, league.key); });
+      chip.appendChild(document.createTextNode(league.name));
+      unassignedZone.appendChild(chip);
     });
-    unassignedZone.innerHTML = html;
   }
 
-  // Drag-over highlight
   document.querySelectorAll('.tier-drop-zone').forEach(function(zone) {
     zone.addEventListener('dragenter', function(){ zone.classList.add('drag-over'); });
     zone.addEventListener('dragleave', function(e){
@@ -2787,8 +2850,11 @@ function renderTierZones() {
   });
 }
 
-// Apply prefs on page load (re-use filterLeagues which reads prefs)
-document.addEventListener('DOMContentLoaded', function() { filterLeagues(); });
+document.addEventListener('DOMContentLoaded', function() {
+  renderTeamSearch();
+  renderTierZones();
+  filterLeagues();
+});
 """
 
 
