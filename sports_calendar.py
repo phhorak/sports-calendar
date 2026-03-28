@@ -192,7 +192,7 @@ def _streamed_match_id(stream_url):
     if parsed.netloc not in ("streamed.pk", "www.streamed.pk"):
         return None
     parts = [p for p in parsed.path.split("/") if p]
-    if len(parts) < 2 ohows[0] != "watch":
+    if len(parts) < 2 or parts[0] != "watch":
         return None
     return parts[1]
 
