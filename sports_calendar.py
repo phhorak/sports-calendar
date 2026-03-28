@@ -119,6 +119,67 @@ def fetch_scoreboard(sport, league, date_str):
         return None
 
 
+def fetch_teams_for_league(sport, league_key, league_path):
+    """Fetch all teams for a league from ESPN teams endpoint."""
+    url = f"https://site.api.espn.com/apis/site/v2/sports/{sport}/{league_path}/teams"
+    try:
+        resp = requests.get(url, params={"limit": 200}, timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+        teams = []
+        for item in data.get("sports", [{}])[0].get("leagues", [{}])[0].get("teams", []):
+            t = item.get("team", {})
+            abbr = t.get("abbreviation", "")
+            name = t.get("displayName", t.get("name", abbr))
+            logo = ""
+            logos = t.get("logos", [])
+            if logos:
+                logo = logos[0].get("href", "")
+            if abbr:
+                teams.append({
+                    "abbr": abbr,
+                    "name": name,
+                    "logo": logo,
+                    "league": league_key,
+                    "leagueName": "",  # filled in by caller
+                })
+        return teams
+    except Exception:
+        return []
+
+
+def fetch_all_teams(all_leagues):
+    """Fetch teams for all non-international, non-F1 leagues in parallel."""
+    # Skip leagues where team lists aren't meaningful
+    skip = {"f1", "fifa.friendly", "fifa.worldq.uefa", "fifa.world",
+            "uefa.euro", "uefa.nations", "uefa.champions", "uefa.europa"}
+    to_fetch = [(lk, sport, league, display)
+                for lk, sport, league, display in all_leagues
+                if lk not in skip]
+
+    results = {}
+    with ThreadPoolExecutor(max_workers=10) as pool:
+        futures = {pool.submit(fetch_teams_for_league, sport, lk, league): (lk, display)
+                   for lk, sport, league, display in to_fetch}
+        for f in as_completed(futures):
+            lk, display = futures[f]
+            teams = f.result()
+            for t in teams:
+                t["leagueName"] = display
+            results[lk] = teams
+
+    # Merge all, deduplicate by abbr+league
+    seen = set()
+    merged = []
+    for lk, display, *_ in [(lk, display) for lk, _, _, display in to_fetch]:
+        for t in results.get(lk, []):
+            key = t["abbr"] + ":" + t["league"]
+            if key not in seen:
+                seen.add(key)
+                merged.append(t)
+    return merged
+
+
 def fetch_streams():
     """Fetch today's streams from streamed.su API."""
     try:
@@ -1284,7 +1345,7 @@ def _render_large(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" style="{border_style}" onclick="toggleDetail(this, event)">
+    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-orig-tier="S" style="{border_style}" onclick="toggleDetail(this, event)">
   <div class="game-status">{_state_indicator(game["state"])} {_esc(game["time_display"])} {broadcast} {event_type}</div>
   <div class="team-row">
     {logo_away}
@@ -1319,7 +1380,7 @@ def _render_medium(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" style="{border_style}" onclick="toggleDetail(this, event)">
+    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-orig-tier="A" style="{border_style}" onclick="toggleDetail(this, event)">
   <div class="medium-status">{_state_indicator(game["state"])} {_esc(game["time_display"])}{broadcast}{event_type}</div>
   <div class="medium-matchup">
     {logo_away} <span class="abbr">{_esc(game["away_abbr"])}</span>
@@ -1346,7 +1407,7 @@ def _render_compact(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" onclick="toggleDetail(this, event)">
+    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-orig-tier="B" onclick="toggleDetail(this, event)">
   <span class="compact-status">{_state_indicator(game["state"])}{_esc(game["time_display"])}</span>
   <span class="compact-matchup">{_esc(game["away_abbr"])} @ {_esc(game["home_abbr"])}</span>
   <span class="compact-score">{scores}</span>
@@ -1425,7 +1486,7 @@ def _render_calendar_event(game, cast_enabled=False):
 
 
 def render_html(tiered_games, config, generated_at, errors, all_games_flat,
-                extra_games=None, league_info=None):
+                extra_games=None, league_info=None, all_teams=None):
     """Render the full HTML dashboard with tabs."""
     refresh = config.get("refresh_interval", 300)
     show_logos = config.get("show_logos", True)
@@ -1438,22 +1499,7 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     today_iso = generated_at.strftime("%Y-%m-%d")
 
     # ── Teams data for settings panel ──
-    _seen_teams = {}
-    for g in list(all_games_flat) + list(extra_games or []):
-        for side in ("home", "away"):
-            abbr = g.get(f"{side}_abbr", "")
-            if not abbr or g.get("is_f1"):
-                continue
-            key = f"{g['league_key']}:{abbr}"
-            if key not in _seen_teams:
-                _seen_teams[key] = {
-                    "abbr": abbr,
-                    "name": g.get(f"{side}_name", abbr),
-                    "logo": g.get(f"{side}_logo", ""),
-                    "league": g["league_key"],
-                    "leagueName": g.get("league_name", g["league_key"]),
-                }
-    teams_data_js = json.dumps(list(_seen_teams.values()), ensure_ascii=True).replace("</", "<\\/")
+    teams_data_js = json.dumps(all_teams or [], ensure_ascii=True).replace("</", "<\\/")
 
     # ── League list for settings panel ──
     all_league_keys_js = json.dumps([
@@ -1660,6 +1706,7 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-label">My Tiers &mdash; Teams</div>
+      <p class="settings-hint">Drag your favorite teams into a tier. Games involving those teams will appear in that tier on the dashboard. S = must-watch, A = interested, B = keep an eye on.</p>
       <div class="tier-label tier-s-label">S</div>
       <div class="tier-drop-zone" id="tier-teams-S" ondragover="event.preventDefault()" ondrop="dropTeam(event,'S')"></div>
       <div class="tier-label tier-a-label">A</div>
@@ -1669,6 +1716,7 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-label">My Tiers &mdash; Leagues</div>
+      <p class="settings-hint">Assign entire leagues to a tier to show all their games at that level. Unassigned leagues are hidden in My View.</p>
       <div class="tier-label tier-s-label">S</div>
       <div class="tier-drop-zone" id="tier-leagues-S" ondragover="event.preventDefault()" ondrop="dropLeague(event,'S')"></div>
       <div class="tier-label tier-a-label">A</div>
@@ -1677,6 +1725,10 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
       <div class="tier-drop-zone" id="tier-leagues-B" ondragover="event.preventDefault()" ondrop="dropLeague(event,'B')"></div>
       <div class="tier-label" style="color:var(--text-dim)">Unassigned</div>
       <div class="tier-drop-zone tier-unassigned" id="tier-leagues-none" ondragover="event.preventDefault()" ondrop="dropLeague(event,'none')"></div>
+    </div>
+    <div class="settings-actions">
+      <button class="settings-btn settings-btn-primary" onclick="applyAndUpdate()">Save &amp; Update</button>
+      <button class="settings-btn settings-btn-reset" onclick="resetToDefaults()">Reset</button>
     </div>
   </div>
 
@@ -2267,6 +2319,12 @@ h1 {
 }
 
 /* Settings panel */
+.settings-hint {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
 .settings-search {
   width: 100%;
   padding: 5px 8px;
@@ -2363,6 +2421,35 @@ h1 {
   font-family: inherit;
 }
 .tier-chip-remove:hover { color: var(--error-yellow); }
+
+.settings-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.settings-btn {
+  flex: 1;
+  padding: 7px 0;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+.settings-btn-primary {
+  background: var(--accent-a);
+  color: white;
+  border-color: var(--accent-a);
+}
+.settings-btn-primary:hover { opacity: 0.88; }
+.settings-btn-reset {
+  background: var(--surface);
+  color: var(--text);
+}
+.settings-btn-reset:hover { background: var(--surface-hover); }
 
 footer {
   text-align: center;
@@ -2543,62 +2630,147 @@ function switchView(all) {
   filterLeagues();
 }
 
+// Stash of all game cards extracted from original HTML, keyed by a unique index
+var _allCards = null;
+var _origDashboard = null;
+
+function _extractAllCards() {
+  if (_allCards) return;
+  _allCards = [];
+  var dashboard = document.getElementById('tab-dashboard');
+  if (!dashboard) return;
+  _origDashboard = dashboard.innerHTML;
+  // Collect every game card (has data-league)
+  dashboard.querySelectorAll('[data-league]').forEach(function(el) {
+    _allCards.push(el.cloneNode(true));
+  });
+}
+
 function filterLeagues() {
+  _extractAllCards();
+
   var checked = new Set();
   document.querySelectorAll('.sidebar-league input:checked').forEach(function(cb) {
     checked.add(cb.value);
   });
 
-  // Collect user prefs
+  var dashboard = document.getElementById('tab-dashboard');
+  if (!dashboard) return;
+
+  if (viewAll) {
+    // Restore original and show/hide by checked leagues
+    dashboard.innerHTML = _origDashboard;
+    dashboard.querySelectorAll('[data-league]').forEach(function(el) {
+      el.style.display = checked.has(el.getAttribute('data-league')) ? '' : 'none';
+    });
+    _cleanupGrids(dashboard);
+    return;
+  }
+
   var prefs = loadPrefs();
-  var prefTeams = new Set();
+  var teamTier = {};
   ['S','A','B'].forEach(function(t) {
-    (prefs.teams[t] || []).forEach(function(abbrLeague) { prefTeams.add(abbrLeague); });
+    (prefs.teams[t]||[]).forEach(function(k){ teamTier[k] = t; });
   });
-  var prefLeagues = {};
+  var leagueTier = {};
   ['S','A','B'].forEach(function(t) {
-    (prefs.leagues[t] || []).forEach(function(lk) { prefLeagues[lk] = t; });
+    (prefs.leagues[t]||[]).forEach(function(k){ leagueTier[k] = t; });
   });
-  var hasPrefs = prefTeams.size > 0 || Object.keys(prefLeagues).length > 0;
+  var hasPrefs = Object.keys(teamTier).length > 0 || Object.keys(leagueTier).length > 0;
 
-  document.querySelectorAll('[data-league]').forEach(function(el) {
-    var league = el.getAttribute('data-league');
-    var inExtra = !!el.closest('.tier-extra');
-    var leagueChecked = checked.has(league);
+  // Sort cards into tier buckets grouped by league
+  // buckets[tier][leagueKey] = [cardElement, ...]
+  var buckets = { S: {}, A: {}, B: {} };
 
-    if (viewAll) {
-      el.style.display = leagueChecked ? '' : 'none';
-    } else if (hasPrefs) {
-      // My View with prefs: show if team or league is in any tier and league is checked
-      var homeAbbr = el.getAttribute('data-home-abbr') || '';
-      var awayAbbr = el.getAttribute('data-away-abbr') || '';
-      var teamMatch = prefTeams.has(homeAbbr + ':' + league) || prefTeams.has(awayAbbr + ':' + league);
-      var leagueMatch = !!prefLeagues[league];
-      el.style.display = (leagueChecked && (teamMatch || leagueMatch)) ? '' : 'none';
+  (_allCards||[]).forEach(function(card) {
+    var league = card.getAttribute('data-league');
+    if (!checked.has(league)) return;
+
+    var home = card.getAttribute('data-home-abbr') || '';
+    var away = card.getAttribute('data-away-abbr') || '';
+    var tier;
+
+    if (!hasPrefs) {
+      // No prefs: use original Python tier (stored as data-orig-tier we'll set below)
+      tier = card.getAttribute('data-orig-tier') || 'B';
     } else {
-      // No prefs: My View shows tiered (non-extra) games for checked leagues
-      el.style.display = (!inExtra && leagueChecked) ? '' : 'none';
+      // Team pref takes priority over league pref
+      tier = teamTier[home + ':' + league] || teamTier[away + ':' + league] || leagueTier[league];
+      if (!tier) return; // not in any pref
     }
+
+    if (!buckets[tier][league]) buckets[tier][league] = [];
+    buckets[tier][league].push(card);
   });
 
-  // Show/hide league labels + grids
-  document.querySelectorAll('.games-grid').forEach(function(grid) {
-    var hasVisible = false;
-    grid.querySelectorAll('[data-league]').forEach(function(el) {
-      if (el.style.display !== 'none') hasVisible = true;
+  // Render buckets into dashboard
+  var leagueInfoMap = {};
+  (window.ALL_LEAGUES_LIST||[]).forEach(function(l){ leagueInfoMap[l.key] = l; });
+
+  var frag = document.createDocumentFragment();
+  var anySection = false;
+
+  ['S','A','B'].forEach(function(tier) {
+    var tierBucket = buckets[tier];
+    var leagueKeys = Object.keys(tierBucket);
+    if (!leagueKeys.length) return;
+    anySection = true;
+
+    var section = document.createElement('section');
+    section.className = 'tier-section tier-' + tier.toLowerCase();
+
+    leagueKeys.forEach(function(lk) {
+      var cards = tierBucket[lk];
+      var li = leagueInfoMap[lk];
+      var lname = li ? li.name : lk.toUpperCase();
+
+      var label = document.createElement('div');
+      label.className = 'league-label';
+      label.textContent = lname;
+      section.appendChild(label);
+
+      var gridClass = tier === 'S' ? 'tier-s-grid' : tier === 'A' ? 'tier-a-grid' : 'tier-b-grid';
+      var grid = document.createElement('div');
+      grid.className = 'games-grid ' + gridClass;
+
+      cards.forEach(function(origCard) {
+        var card = origCard.cloneNode(true);
+        // Re-style card size to match tier
+        if (!card.classList.contains('compact-row') && !card.classList.contains('f1-card')) {
+          if (tier === 'S') { card.classList.remove('medium'); card.classList.add('large'); }
+          else if (tier === 'A') { card.classList.remove('large'); card.classList.add('medium'); }
+          else { card.classList.remove('large'); card.classList.add('medium'); }
+        }
+        card.style.display = '';
+        grid.appendChild(card);
+      });
+
+      section.appendChild(grid);
+    });
+
+    frag.appendChild(section);
+  });
+
+  dashboard.innerHTML = '';
+  if (anySection) {
+    dashboard.appendChild(frag);
+  } else {
+    dashboard.innerHTML = '<div class="no-games">No games match your favorites &mdash; try adjusting your tier settings</div>';
+  }
+}
+
+function _cleanupGrids(container) {
+  (container || document).querySelectorAll('.games-grid').forEach(function(grid) {
+    var hasVisible = Array.from(grid.querySelectorAll('[data-league]')).some(function(el){
+      return el.style.display !== 'none';
     });
     grid.style.display = hasVisible ? '' : 'none';
     var prev = grid.previousElementSibling;
-    if (prev && prev.classList.contains('league-label')) {
-      prev.style.display = hasVisible ? '' : 'none';
-    }
+    if (prev && prev.classList.contains('league-label')) prev.style.display = hasVisible ? '' : 'none';
   });
-
-  // Show tier sections only if they have visible content
-  document.querySelectorAll('.tier-section').forEach(function(sec) {
-    var hasVisible = false;
-    sec.querySelectorAll('[data-league]').forEach(function(el) {
-      if (el.style.display !== 'none') hasVisible = true;
+  (container || document).querySelectorAll('.tier-section').forEach(function(sec) {
+    var hasVisible = Array.from(sec.querySelectorAll('[data-league]')).some(function(el){
+      return el.style.display !== 'none';
     });
     sec.style.display = hasVisible ? '' : 'none';
   });
@@ -2621,17 +2793,25 @@ function loadPrefs() {
     var raw = localStorage.getItem('sports_prefs');
     if (raw) {
       var p = JSON.parse(raw);
-      if (p && p.teams && p.leagues) return p;
+      if (p && p.teams && p.leagues) {
+        // Check if non-empty
+        var hasAny = ['S','A','B'].some(function(t) {
+          return (p.teams[t]||[]).length > 0 || (p.leagues[t]||[]).length > 0;
+        });
+        if (hasAny) return p;
+      }
     }
   } catch(e) {}
-  // Seed from config defaults on first load
+  return defaultPrefs();
+}
+
+function defaultPrefs() {
   var prefs = { teams: {S:[], A:[], B:[]}, leagues: {S:[], A:[], B:[]} };
   var defaults = window.CONFIG_DEFAULTS || {teams:{S:[],A:[],B:[]}, leagues:{S:[],A:[],B:[]}};
   ['S','A','B'].forEach(function(t) {
     prefs.teams[t] = (defaults.teams[t] || []).slice();
     prefs.leagues[t] = (defaults.leagues[t] || []).slice();
   });
-  savePrefs(prefs);
   return prefs;
 }
 
@@ -2702,7 +2882,6 @@ function addTeam(key, tier) {
   savePrefs(prefs);
   renderTeamSearch();
   renderTierZones();
-  filterLeagues();
 }
 
 function removeTeam(key) {
@@ -2712,7 +2891,6 @@ function removeTeam(key) {
   });
   savePrefs(prefs);
   renderTierZones();
-  filterLeagues();
 }
 
 function removeLeague(key) {
@@ -2721,6 +2899,19 @@ function removeLeague(key) {
     prefs.leagues[t] = (prefs.leagues[t]||[]).filter(function(k){ return k !== key; });
   });
   savePrefs(prefs);
+  renderTierZones();
+}
+
+function applyAndUpdate() {
+  filterLeagues();
+  // Flash the button to confirm
+  var btn = document.querySelector('.settings-btn-primary');
+  if (btn) { btn.textContent = 'Saved!'; setTimeout(function(){ btn.textContent = 'Save & Update'; }, 1200); }
+}
+
+function resetToDefaults() {
+  savePrefs(defaultPrefs());
+  renderTeamSearch();
   renderTierZones();
   filterLeagues();
 }
@@ -2762,7 +2953,6 @@ function dropLeague(evt, tier) {
   _dragLeague = null;
   document.querySelectorAll('.tier-drop-zone').forEach(function(z){ z.classList.remove('drag-over'); });
   renderTierZones();
-  filterLeagues();
 }
 
 function renderTierZones() {
@@ -2991,9 +3181,13 @@ def main():
             "key": lk, "display": display, "mine": is_mine, "count": game_count,
         })
 
+    print("Fetching team rosters...")
+    all_teams = fetch_all_teams(ALL_LEAGUES)
+    print(f"  Got {len(all_teams)} teams across all leagues")
+
     generated_at = datetime.now(local_tz)
     html = render_html(tiered, config, generated_at, errors, all_classified,
-                       extra_games, league_info)
+                       extra_games, league_info, all_teams=all_teams)
 
     # Inject configured leagues for JS date navigation
     leagues_js = json.dumps([
