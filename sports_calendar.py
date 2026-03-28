@@ -1284,7 +1284,7 @@ def _render_large(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" style="{border_style}" onclick="toggleDetail(this, event)">
+    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" style="{border_style}" onclick="toggleDetail(this, event)">
   <div class="game-status">{_state_indicator(game["state"])} {_esc(game["time_display"])} {broadcast} {event_type}</div>
   <div class="team-row">
     {logo_away}
@@ -1319,7 +1319,7 @@ def _render_medium(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" style="{border_style}" onclick="toggleDetail(this, event)">
+    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" style="{border_style}" onclick="toggleDetail(this, event)">
   <div class="medium-status">{_state_indicator(game["state"])} {_esc(game["time_display"])}{broadcast}{event_type}</div>
   <div class="medium-matchup">
     {logo_away} <span class="abbr">{_esc(game["away_abbr"])}</span>
@@ -1346,7 +1346,7 @@ def _render_compact(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" onclick="toggleDetail(this, event)">
+    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" onclick="toggleDetail(this, event)">
   <span class="compact-status">{_state_indicator(game["state"])}{_esc(game["time_display"])}</span>
   <span class="compact-matchup">{_esc(game["away_abbr"])} @ {_esc(game["home_abbr"])}</span>
   <span class="compact-score">{scores}</span>
@@ -1436,6 +1436,30 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     time_str = generated_at.strftime("%-I:%M %p %Z")
     today_str = generated_at.strftime("%A, %B %-d")
     today_iso = generated_at.strftime("%Y-%m-%d")
+
+    # ── Teams data for settings panel ──
+    _seen_teams = {}
+    for g in list(all_games_flat) + list(extra_games or []):
+        for side in ("home", "away"):
+            abbr = g.get(f"{side}_abbr", "")
+            if not abbr or g.get("is_f1"):
+                continue
+            key = f"{g['league_key']}:{abbr}"
+            if key not in _seen_teams:
+                _seen_teams[key] = {
+                    "abbr": abbr,
+                    "name": g.get(f"{side}_name", abbr),
+                    "logo": g.get(f"{side}_logo", ""),
+                    "league": g["league_key"],
+                    "leagueName": g.get("league_name", g["league_key"]),
+                }
+    teams_data_js = json.dumps(list(_seen_teams.values()), ensure_ascii=False)
+
+    # ── League list for settings panel ──
+    all_league_keys_js = json.dumps([
+        {"key": li["key"], "name": li["display"]}
+        for li in (league_info or [])
+    ], ensure_ascii=False)
 
     # ── Dashboard tab ──
     def group_by_league(games):
@@ -1600,16 +1624,50 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
 
 <div class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <span class="sidebar-title">Leagues</span>
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" onclick="switchSidebarTab('leagues', this)">Leagues</button>
+      <button class="sidebar-tab" onclick="switchSidebarTab('settings', this)">Settings</button>
+    </div>
     <button class="sidebar-close" onclick="toggleSidebar()">&times;</button>
   </div>
-  <div class="sidebar-section">
-    <div class="sidebar-section-label">My Leagues</div>
-    {chr(10).join(s for s, li in zip(sidebar_items, league_info or []) if li.get("mine"))}
+
+  <div class="sidebar-panel" id="sidebar-panel-leagues">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Leagues</div>
+      {chr(10).join(s for s, li in zip(sidebar_items, league_info or []) if li.get("mine"))}
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Other Leagues</div>
+      {chr(10).join(s for s, li in zip(sidebar_items, league_info or []) if not li.get("mine"))}
+    </div>
   </div>
-  <div class="sidebar-section">
-    <div class="sidebar-section-label">Other Leagues</div>
-    {chr(10).join(s for s, li in zip(sidebar_items, league_info or []) if not li.get("mine"))}
+
+  <div class="sidebar-panel" id="sidebar-panel-settings" style="display:none">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Favorite Teams</div>
+      <input class="settings-search" id="team-search" type="text" placeholder="Search teams..." oninput="renderTeamSearch()">
+      <div class="team-search-results" id="team-search-results"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Tiers — Teams</div>
+      <div class="tier-label tier-s-label">S</div>
+      <div class="tier-drop-zone" id="tier-teams-S" data-tier="S" ondragover="event.preventDefault()" ondrop="dropTeam(event,'S')"></div>
+      <div class="tier-label tier-a-label">A</div>
+      <div class="tier-drop-zone" id="tier-teams-A" data-tier="A" ondragover="event.preventDefault()" ondrop="dropTeam(event,'A')"></div>
+      <div class="tier-label tier-b-label">B</div>
+      <div class="tier-drop-zone" id="tier-teams-B" data-tier="B" ondragover="event.preventDefault()" ondrop="dropTeam(event,'B')"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Tiers — Leagues</div>
+      <div class="tier-label tier-s-label">S</div>
+      <div class="tier-drop-zone" id="tier-leagues-S" data-tier="S" ondragover="event.preventDefault()" ondrop="dropLeague(event,'S')"></div>
+      <div class="tier-label tier-a-label">A</div>
+      <div class="tier-drop-zone" id="tier-leagues-A" data-tier="A" ondragover="event.preventDefault()" ondrop="dropLeague(event,'A')"></div>
+      <div class="tier-label tier-b-label">B</div>
+      <div class="tier-drop-zone" id="tier-leagues-B" data-tier="B" ondragover="event.preventDefault()" ondrop="dropLeague(event,'B')"></div>
+      <div class="tier-label" style="color:var(--text-dim)">Unassigned</div>
+      <div class="tier-drop-zone tier-unassigned" id="tier-leagues-none" ondragover="event.preventDefault()" ondrop="dropLeague(event,'none')"></div>
+    </div>
   </div>
 </div>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -1650,6 +1708,8 @@ window.CAST_CONFIG = {{
   enabled: {str(cast_enabled).lower()},
   endpoint: "http://{_esc_js(cast_host)}:{cast_port}"
 }};
+window.ALL_TEAMS = {teams_data_js};
+window.ALL_LEAGUES_LIST = {all_league_keys_js};
 {JS}
 </script>
 </body>
@@ -2161,6 +2221,127 @@ h1 {
 
 .tier-extra .league-label { color: var(--text-dim); }
 
+/* Sidebar tabs */
+.sidebar-tabs {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.sidebar-tab {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  color: var(--text-dim);
+  font-family: inherit;
+}
+.sidebar-tab:hover { background: var(--surface); color: var(--text-bright); }
+.sidebar-tab.active {
+  background: var(--surface);
+  color: var(--text-bright);
+  font-weight: 600;
+}
+
+/* Settings panel */
+.settings-search {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+  color: var(--text-bright);
+  font-family: inherit;
+  margin-bottom: 6px;
+}
+.settings-search:focus { outline: 1px solid var(--accent-a); }
+
+.team-search-results {
+  max-height: 180px;
+  overflow-y: auto;
+}
+.team-search-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 2px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.team-search-row:hover { background: var(--surface); }
+.team-search-row img { width: 18px; height: 18px; object-fit: contain; }
+.team-search-name { flex: 1; color: var(--text-bright); }
+.team-search-league { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; }
+.team-search-add {
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface-hover);
+  color: var(--accent-a);
+  cursor: pointer;
+  font-family: inherit;
+}
+.team-search-add:hover { background: var(--border); }
+.team-search-add.added { color: var(--text-dim); cursor: default; }
+
+/* Tier drop zones */
+.tier-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 8px 0 3px;
+}
+.tier-s-label { color: var(--accent-s); }
+.tier-a-label { color: var(--accent-a); }
+.tier-b-label { color: var(--accent-b); }
+
+.tier-drop-zone {
+  min-height: 32px;
+  border: 1px dashed var(--border);
+  border-radius: 5px;
+  padding: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+.tier-drop-zone.drag-over { border-color: var(--accent-a); background: rgba(38,139,210,0.05); }
+.tier-unassigned { border-style: solid; }
+
+/* Tier chips */
+.tier-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px 2px 4px;
+  font-size: 0.75rem;
+  cursor: grab;
+  color: var(--text-bright);
+  user-select: none;
+}
+.tier-chip:active { cursor: grabbing; }
+.tier-chip img { width: 14px; height: 14px; object-fit: contain; }
+.tier-chip-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  padding: 0;
+  line-height: 1;
+  margin-left: 2px;
+  font-family: inherit;
+}
+.tier-chip-remove:hover { color: var(--error-yellow); }
+
 footer {
   text-align: center;
   color: var(--text-dim);
@@ -2346,16 +2527,34 @@ function filterLeagues() {
     checked.add(cb.value);
   });
 
+  // Collect user prefs
+  var prefs = loadPrefs();
+  var prefTeams = new Set();
+  ['S','A','B'].forEach(function(t) {
+    (prefs.teams[t] || []).forEach(function(abbrLeague) { prefTeams.add(abbrLeague); });
+  });
+  var prefLeagues = {};
+  ['S','A','B'].forEach(function(t) {
+    (prefs.leagues[t] || []).forEach(function(lk) { prefLeagues[lk] = t; });
+  });
+  var hasPrefs = prefTeams.size > 0 || Object.keys(prefLeagues).length > 0;
+
   document.querySelectorAll('[data-league]').forEach(function(el) {
     var league = el.getAttribute('data-league');
     var inExtra = !!el.closest('.tier-extra');
     var leagueChecked = checked.has(league);
 
     if (viewAll) {
-      // Show anything in a checked league
       el.style.display = leagueChecked ? '' : 'none';
+    } else if (hasPrefs) {
+      // My View with prefs: show if team or league is in any tier and league is checked
+      var homeAbbr = el.getAttribute('data-home-abbr') || '';
+      var awayAbbr = el.getAttribute('data-away-abbr') || '';
+      var teamMatch = prefTeams.has(homeAbbr + ':' + league) || prefTeams.has(awayAbbr + ':' + league);
+      var leagueMatch = !!prefLeagues[league];
+      el.style.display = (leagueChecked && (teamMatch || leagueMatch)) ? '' : 'none';
     } else {
-      // My View: tiered cards always show (if league checked); extra always hidden
+      // No prefs: My View shows tiered (non-extra) games for checked leagues
       el.style.display = (!inExtra && leagueChecked) ? '' : 'none';
     }
   });
@@ -2382,6 +2581,214 @@ function filterLeagues() {
     sec.style.display = hasVisible ? '' : 'none';
   });
 }
+
+// ── Settings panel ──────────────────────────────────────────────
+
+function switchSidebarTab(name, btn) {
+  document.querySelectorAll('.sidebar-tab').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.sidebar-panel').forEach(function(p) { p.style.display = 'none'; });
+  btn.classList.add('active');
+  document.getElementById('sidebar-panel-' + name).style.display = '';
+  if (name === 'settings') initSettings();
+}
+
+// localStorage prefs schema: { teams: {S:[...], A:[...], B:[...]}, leagues: {S:[...], A:[...], B:[...]} }
+// team keys are "ABBR:league_key", league keys are league_key strings
+
+function loadPrefs() {
+  try {
+    var raw = localStorage.getItem('sports_prefs');
+    if (raw) {
+      var p = JSON.parse(raw);
+      if (p && p.teams && p.leagues) return p;
+    }
+  } catch(e) {}
+  return { teams: {S:[], A:[], B:[]}, leagues: {S:[], A:[], B:[]} };
+}
+
+function savePrefs(prefs) {
+  localStorage.setItem('sports_prefs', JSON.stringify(prefs));
+}
+
+function initSettings() {
+  renderTeamSearch();
+  renderTierZones();
+}
+
+function renderTeamSearch() {
+  var q = (document.getElementById('team-search').value || '').toLowerCase().trim();
+  var prefs = loadPrefs();
+  var allAdded = new Set();
+  ['S','A','B'].forEach(function(t) { (prefs.teams[t]||[]).forEach(function(k){ allAdded.add(k); }); });
+
+  var teams = window.ALL_TEAMS || [];
+  var filtered = q
+    ? teams.filter(function(t) {
+        return t.abbr.toLowerCase().includes(q) ||
+               t.name.toLowerCase().includes(q) ||
+               t.leagueName.toLowerCase().includes(q);
+      })
+    : teams.slice(0, 30);
+
+  var html = '';
+  filtered.forEach(function(t) {
+    var key = t.abbr + ':' + t.league;
+    var added = allAdded.has(key);
+    var img = t.logo ? '<img src="' + t.logo + '" alt="">' : '<span style="width:18px;display:inline-block"></span>';
+    html += '<div class="team-search-row">' +
+      img +
+      '<span class="team-search-name">' + t.name + '</span>' +
+      '<span class="team-search-league">' + t.leagueName + '</span>' +
+      '<button class="team-search-add' + (added ? ' added' : '') + '" ' +
+        'onclick="addTeam(' + JSON.stringify(key) + ',\'B\')" ' +
+        (added ? 'disabled' : '') + '>' +
+        (added ? '✓' : '+ Add') +
+      '</button>' +
+    '</div>';
+  });
+  if (!html) html = '<div style="font-size:0.75rem;color:var(--text-dim);padding:4px">No teams found</div>';
+  document.getElementById('team-search-results').innerHTML = html;
+}
+
+function addTeam(key, tier) {
+  var prefs = loadPrefs();
+  // Remove from all tiers first
+  ['S','A','B'].forEach(function(t) {
+    prefs.teams[t] = (prefs.teams[t]||[]).filter(function(k){ return k !== key; });
+  });
+  if (!prefs.teams[tier]) prefs.teams[tier] = [];
+  prefs.teams[tier].push(key);
+  savePrefs(prefs);
+  renderTeamSearch();
+  renderTierZones();
+  filterLeagues();
+}
+
+function removeTeam(key) {
+  var prefs = loadPrefs();
+  ['S','A','B'].forEach(function(t) {
+    prefs.teams[t] = (prefs.teams[t]||[]).filter(function(k){ return k !== key; });
+  });
+  savePrefs(prefs);
+  renderTierZones();
+  filterLeagues();
+}
+
+function removeLeague(key) {
+  var prefs = loadPrefs();
+  ['S','A','B'].forEach(function(t) {
+    prefs.leagues[t] = (prefs.leagues[t]||[]).filter(function(k){ return k !== key; });
+  });
+  savePrefs(prefs);
+  renderTierZones();
+  filterLeagues();
+}
+
+var _dragTeam = null;
+var _dragLeague = null;
+
+function dragTeamStart(evt, key) {
+  _dragTeam = key;
+  evt.dataTransfer.effectAllowed = 'move';
+}
+
+function dropTeam(evt, tier) {
+  evt.preventDefault();
+  if (!_dragTeam) return;
+  addTeam(_dragTeam, tier);
+  _dragTeam = null;
+  document.querySelectorAll('.tier-drop-zone').forEach(function(z){ z.classList.remove('drag-over'); });
+}
+
+function dragLeagueStart(evt, key) {
+  _dragLeague = key;
+  evt.dataTransfer.effectAllowed = 'move';
+}
+
+function dropLeague(evt, tier) {
+  evt.preventDefault();
+  if (!_dragLeague) return;
+  var prefs = loadPrefs();
+  ['S','A','B'].forEach(function(t) {
+    prefs.leagues[t] = (prefs.leagues[t]||[]).filter(function(k){ return k !== _dragLeague; });
+  });
+  if (tier !== 'none') {
+    if (!prefs.leagues[tier]) prefs.leagues[tier] = [];
+    prefs.leagues[tier].push(_dragLeague);
+  }
+  savePrefs(prefs);
+  _dragLeague = null;
+  document.querySelectorAll('.tier-drop-zone').forEach(function(z){ z.classList.remove('drag-over'); });
+  renderTierZones();
+  filterLeagues();
+}
+
+function renderTierZones() {
+  var prefs = loadPrefs();
+  var teamMap = {};
+  (window.ALL_TEAMS || []).forEach(function(t){ teamMap[t.abbr + ':' + t.league] = t; });
+
+  // Teams
+  ['S','A','B'].forEach(function(tier) {
+    var zone = document.getElementById('tier-teams-' + tier);
+    if (!zone) return;
+    var html = '';
+    (prefs.teams[tier]||[]).forEach(function(key) {
+      var t = teamMap[key];
+      if (!t) return;
+      var img = t.logo ? '<img src="' + t.logo + '" alt="">' : '';
+      html += '<div class="tier-chip" draggable="true" ondragstart="dragTeamStart(event,' + JSON.stringify(key) + ')">' +
+        img + t.abbr +
+        '<button class="tier-chip-remove" onclick="removeTeam(' + JSON.stringify(key) + ')" title="Remove">&times;</button>' +
+      '</div>';
+    });
+    zone.innerHTML = html;
+  });
+
+  // Leagues
+  var allLeagues = window.ALL_LEAGUES_LIST || [];
+  var assignedLeagues = new Set();
+  ['S','A','B'].forEach(function(t){ (prefs.leagues[t]||[]).forEach(function(k){ assignedLeagues.add(k); }); });
+
+  ['S','A','B'].forEach(function(tier) {
+    var zone = document.getElementById('tier-leagues-' + tier);
+    if (!zone) return;
+    var html = '';
+    (prefs.leagues[tier]||[]).forEach(function(key) {
+      var league = allLeagues.find(function(l){ return l.key === key; });
+      var name = league ? league.name : key;
+      html += '<div class="tier-chip" draggable="true" ondragstart="dragLeagueStart(event,' + JSON.stringify(key) + ')">' +
+        name +
+        '<button class="tier-chip-remove" onclick="removeLeague(' + JSON.stringify(key) + ')" title="Remove">&times;</button>' +
+      '</div>';
+    });
+    zone.innerHTML = html;
+  });
+
+  // Unassigned leagues
+  var unassignedZone = document.getElementById('tier-leagues-none');
+  if (unassignedZone) {
+    var html = '';
+    allLeagues.forEach(function(league) {
+      if (assignedLeagues.has(league.key)) return;
+      html += '<div class="tier-chip" draggable="true" ondragstart="dragLeagueStart(event,' + JSON.stringify(league.key) + ')">' +
+        league.name +
+      '</div>';
+    });
+    unassignedZone.innerHTML = html;
+  }
+
+  // Drag-over highlight
+  document.querySelectorAll('.tier-drop-zone').forEach(function(zone) {
+    zone.addEventListener('dragenter', function(){ zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', function(e){
+      if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over');
+    });
+  });
+}
+
+// Apply prefs on page load (re-use filterLeagues which reads prefs)
+document.addEventListener('DOMContentLoaded', function() { filterLeagues(); });
 """
 
 
