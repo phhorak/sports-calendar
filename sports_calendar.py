@@ -1329,6 +1329,14 @@ def _detail_links(game, cast_enabled=False):
     return '<div class="detail-panel">' + " ".join(links) + '</div>'
 
 
+def _utc_ms(game):
+    """Return Unix timestamp in ms for a game's start time, or empty string."""
+    gt = game.get("game_time")
+    if gt:
+        return str(int(gt.timestamp() * 1000))
+    return ""
+
+
 def _render_large(game, show_logos, cast_enabled):
     fav_class = " favorite" if game.get("is_favorite") else ""
     fav_color = game["home_color"] if game.get("is_favorite") else "444"
@@ -1345,9 +1353,10 @@ def _render_large(game, show_logos, cast_enabled):
     event_type = f'<span class="event-type">{_esc(game["event_type"])}</span>' if game["event_type"] else ""
 
     details = _detail_links(game, cast_enabled)
+    utc_ms = _utc_ms(game)
 
-    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-orig-tier="S" style="{border_style}" onclick="toggleDetail(this, event)">
-  <div class="game-status"><span class="status-text">{_state_indicator(game["state"])} {_esc(game["time_display"])}</span> {broadcast} {event_type}</div>
+    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-utc="{utc_ms}" data-orig-tier="S" style="{border_style}" onclick="toggleDetail(this, event)">
+  <div class="game-status"><span class="status-text">{_state_indicator(game["state"])} <span class="game-time-display">{_esc(game["time_display"])}</span></span> {broadcast} {event_type}</div>
   <div class="team-row">
     {logo_away}
     <span class="team-name">{_esc(game["away_name"])}</span>
@@ -1382,9 +1391,10 @@ def _render_medium(game, show_logos, cast_enabled):
     event_type = f' &middot; {_esc(game["event_type"])}' if game["event_type"] else ""
 
     details = _detail_links(game, cast_enabled)
+    utc_ms = _utc_ms(game)
 
-    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-orig-tier="A" style="{border_style}" onclick="toggleDetail(this, event)">
-  <div class="medium-status"><span class="status-text">{_state_indicator(game["state"])} {_esc(game["time_display"])}</span>{broadcast}{event_type}</div>
+    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-utc="{utc_ms}" data-orig-tier="A" style="{border_style}" onclick="toggleDetail(this, event)">
+  <div class="medium-status"><span class="status-text">{_state_indicator(game["state"])} <span class="game-time-display">{_esc(game["time_display"])}</span></span>{broadcast}{event_type}</div>
   <div class="medium-matchup">
     {logo_away} <span class="abbr">{_esc(game["away_abbr"])}</span>
     <span class="record-sm">{_esc(game["away_record"])}</span>
@@ -1411,9 +1421,10 @@ def _render_compact(game, show_logos, cast_enabled):
     extra = " &middot; ".join(filter(None, [broadcast, event_type]))
 
     details = _detail_links(game, cast_enabled)
+    utc_ms = _utc_ms(game)
 
-    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text">{_state_indicator(game["state"])}{_esc(game["time_display"])}</span></span>
+    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-utc="{utc_ms}" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text">{_state_indicator(game["state"])}<span class="game-time-display">{_esc(game["time_display"])}</span></span></span>
   <span class="compact-matchup">{_esc(game["away_abbr"])} @ {_esc(game["home_abbr"])}</span>
   <span class="compact-score">{scores}</span>
   <span class="compact-extra">{extra}</span>
@@ -1482,14 +1493,16 @@ def _render_calendar_event(game, cast_enabled=False):
     home_abbr = _esc(game.get("home_abbr", ""))
     away_abbr = _esc(game.get("away_abbr", ""))
     league_key = _esc(game.get("league_key", ""))
+    utc_ms = _utc_ms(game)
     return {
-        "html": f"""<div class="cal-event{fav_class} cal-{state_class}" style="border-left-color: #{_esc(color)};" data-home-abbr="{home_abbr}" data-away-abbr="{away_abbr}" data-league="{league_key}">
+        "html": f"""<div class="cal-event{fav_class} cal-{state_class}" style="border-left-color: #{_esc(color)};" data-home-abbr="{home_abbr}" data-away-abbr="{away_abbr}" data-league="{league_key}" data-utc="{utc_ms}">
   <span class="cal-league">{league}</span>
   <span class="cal-label">{label}{scores}{stream_icon}</span>
-  <span class="cal-time">{_esc(game["time_display"])}</span>
+  <span class="cal-time game-time-display">{_esc(game["time_display"])}</span>
   {actions_html}
 </div>""",
         "hour": game["game_time"].hour if game.get("game_time") else 0,
+        "utc_ms": int(game["game_time"].timestamp() * 1000) if game.get("game_time") else 0,
     }
 
 
@@ -1628,18 +1641,18 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     else:
         min_hour, max_hour = 8, 23
 
+    # Render all calendar events and collect their data for JS TZ rebuild
+    all_cal_events = [_render_calendar_event(g, cast_enabled) for g in timed_games]
+
     hour_slots = []
     for h in range(min_hour, max_hour + 1):
         ampm = "AM" if h < 12 else "PM"
         display_h = h % 12 or 12
         hour_label = f"{display_h} {ampm}"
-        events_in_hour = []
-        for g in timed_games:
-            if g["game_time"].hour == h:
-                events_in_hour.append(_render_calendar_event(g, cast_enabled))
+        events_in_hour = [e for e in all_cal_events if e["hour"] == h]
         events_html = "\n".join(e["html"] for e in events_in_hour)
         now_class = " current-hour" if h == generated_at.hour else ""
-        hour_slots.append(f"""<div class="cal-hour{now_class}">
+        hour_slots.append(f"""<div class="cal-hour{now_class}" data-hour="{h}">
   <div class="cal-hour-label">{hour_label}</div>
   <div class="cal-hour-events">{events_html}</div>
 </div>""")
@@ -1791,6 +1804,17 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     <button class="tab active" onclick="switchTab('dashboard', event)">Dashboard</button>
     <button class="tab" onclick="switchTab('calendar', event)">Calendar</button>
   </div>
+  <div class="tz-selector">
+    <select id="tz-select" onchange="applyTimezone(this.value)" title="Display timezone">
+      <option value="America/New_York">ET</option>
+      <option value="America/Chicago">CT</option>
+      <option value="America/Denver">MT</option>
+      <option value="America/Los_Angeles">PT</option>
+      <option value="Europe/London">London</option>
+      <option value="Europe/Amsterdam">Amsterdam</option>
+      <option value="Europe/Vienna">Vienna</option>
+    </select>
+  </div>
   <span class="updated">Updated {_esc(time_str)}</span>
 </header>
 <div id="tab-dashboard" class="tab-content active">
@@ -1812,6 +1836,7 @@ window.CAST_CONFIG = {{
 window.ALL_TEAMS = {teams_data_js};
 window.ALL_LEAGUES_LIST = {all_league_keys_js};
 window.CONFIG_DEFAULTS = {config_defaults_js};
+window.SERVER_TZ = {json.dumps(str(config.get("timezone", "America/Los_Angeles")))};
 {JS}
 </script>
 </body>
@@ -2487,6 +2512,19 @@ footer {
   padding-top: 12px;
   border-top: 1px solid var(--border);
 }
+
+/* Timezone selector */
+.tz-selector select {
+  font-family: inherit;
+  font-size: 0.78rem;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-bright);
+  cursor: pointer;
+}
+.tz-selector select:focus { outline: 1px solid var(--accent-a); }
 """
 
 
@@ -2534,10 +2572,10 @@ function goToDate(dateStr) {
     var timeline = document.getElementById('cal-timeline');
     if (timeline && _staticCalendarHTML) {
       timeline.innerHTML = _staticCalendarHTML;
-    } else if (timeline) {
-      // No cached content yet — capture what's currently there (first load)
-      // This branch shouldn't normally be hit, but fall back gracefully
-      _staticCalendarHTML = timeline.innerHTML;
+      // Re-apply selected timezone if it differs from server TZ
+      var tz = localStorage.getItem('sports_tz') || window.SERVER_TZ || 'America/Los_Angeles';
+      if (tz !== window.SERVER_TZ) rebuildCalendarTZ(tz);
+      else highlightCalendar();
     }
     return;
   }
@@ -3154,6 +3192,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderTierZones();
   filterLeagues();
   highlightCalendar();
+  initTimezone();
   startLiveScorePolling();
 });
 
@@ -3223,6 +3262,106 @@ function applyLiveScores(events) {
       }
     });
   });
+}
+
+// ── Timezone selector ────────────────────────────────────────────
+
+function _formatTime(utcMs, tz) {
+  try {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric', minute: '2-digit', timeZone: tz
+    }).format(new Date(utcMs));
+  } catch(e) { return ''; }
+}
+
+function applyTimezone(tz) {
+  localStorage.setItem('sports_tz', tz);
+
+  // Update all game-time-display spans that have a data-utc on a parent card
+  document.querySelectorAll('[data-utc]').forEach(function(el) {
+    var utcMs = parseInt(el.getAttribute('data-utc'), 10);
+    if (!utcMs) return;
+    // Get state from closest card or self
+    var card = el.closest('[data-state]') || el;
+    var state = card.getAttribute('data-state') || el.getAttribute('data-state') || 'pre';
+    if (state !== 'pre') return; // live/final status text is from ESPN, not a clock time
+    var display = el.querySelector('.game-time-display') || (el.classList.contains('game-time-display') ? el : null);
+    if (display) display.textContent = _formatTime(utcMs, tz);
+  });
+
+  // Rebuild the static calendar hour slots by the new timezone
+  rebuildCalendarTZ(tz);
+}
+
+function rebuildCalendarTZ(tz) {
+  var timeline = document.getElementById('cal-timeline');
+  if (!timeline) return;
+  if (!_staticCalendarHTML) return; // no cached content yet
+
+  // Re-parse the cached static HTML to get cal-events with data-utc
+  var tmp = document.createElement('div');
+  tmp.innerHTML = _staticCalendarHTML;
+
+  var events = [];
+  tmp.querySelectorAll('.cal-event[data-utc]').forEach(function(ev) {
+    var utcMs = parseInt(ev.getAttribute('data-utc'), 10);
+    if (!utcMs) return;
+    var d = new Date(utcMs);
+    var hour = parseInt(new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric', hour12: false, timeZone: tz
+    }).format(d), 10);
+    // Update the time display span within this cloned event
+    var timeEl = ev.querySelector('.game-time-display');
+    if (timeEl) timeEl.textContent = _formatTime(utcMs, tz);
+    events.push({ hour: hour, el: ev });
+  });
+
+  if (!events.length) return;
+
+  var hours = events.map(function(e){ return e.hour; });
+  var minH = Math.max(0, Math.min.apply(null, hours) - 1);
+  var maxH = Math.min(23, Math.max.apply(null, hours) + 1);
+
+  var nowHour = parseInt(new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric', hour12: false, timeZone: tz
+  }).format(new Date()), 10);
+
+  var html = '';
+  for (var h = minH; h <= maxH; h++) {
+    var ampm = h < 12 ? 'AM' : 'PM';
+    var dh = h % 12 || 12;
+    var nowClass = h === nowHour ? ' current-hour' : '';
+    var eventsHtml = '';
+    events.forEach(function(e) {
+      if (e.hour === h) eventsHtml += e.el.outerHTML;
+    });
+    html += '<div class="cal-hour' + nowClass + '" data-hour="' + h + '">' +
+      '<div class="cal-hour-label">' + dh + ' ' + ampm + '</div>' +
+      '<div class="cal-hour-events">' + eventsHtml + '</div></div>';
+  }
+
+  // Preserve any "Other" block (no data-utc games)
+  var otherBlock = tmp.querySelector('.cal-hour:not([data-hour])');
+  if (otherBlock) html += otherBlock.outerHTML;
+
+  timeline.innerHTML = html;
+  // Re-highlight calendar favorites
+  highlightCalendar();
+}
+
+function initTimezone() {
+  var saved = localStorage.getItem('sports_tz');
+  var sel = document.getElementById('tz-select');
+  if (!sel) return;
+  // Default to server TZ if no saved preference
+  var tz = saved || window.SERVER_TZ || 'America/Los_Angeles';
+  // Find the matching option or fall back to first
+  var found = false;
+  for (var i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].value === tz) { sel.selectedIndex = i; found = true; break; }
+  }
+  if (!found) tz = sel.options[0].value;
+  if (tz !== window.SERVER_TZ) applyTimezone(tz);
 }
 """
 
