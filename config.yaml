@@ -60,10 +60,6 @@ rules:
     league: nfl
 
   - tier: A
-    league: nba
-    season: postseason
-
-  - tier: A
     league: mens-college-basketball
 
   - tier: A
@@ -78,6 +74,10 @@ rules:
   - tier: B
     league: nhl
     teams: [PHI]
+
+  - tier: A
+    league: nba
+    season: postseason
 
   - tier: B
     league: nba

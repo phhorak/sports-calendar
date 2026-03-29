@@ -1528,10 +1528,17 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
     _default_teams = {"S": [], "A": [], "B": []}
     _default_leagues = {"S": [], "A": [], "B": []}
     _seen_team_keys = set()
+    # Build a map of virtual league keys by (realLeague, season) so season-scoped
+    # rules pre-seed the virtual key rather than the real league key.
+    _virtual_by_real = {}
+    for entry in _league_list_entries:
+        if entry.get("virtual"):
+            _virtual_by_real[(entry["virtualLeague"], "postseason")] = entry["key"]
     for rule in config.get("rules", []):
         tier = rule.get("tier", "B")
         lk = rule.get("league", "")
         teams = rule.get("teams", [])
+        season = rule.get("season", "")
         if teams:
             for abbr in teams:
                 key = f"{abbr}:{lk}"
@@ -1539,8 +1546,11 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
                     _seen_team_keys.add(key)
                     _default_teams.setdefault(tier, []).append(key)
         else:
-            if lk and lk not in sum(_default_leagues.values(), []):
-                _default_leagues.setdefault(tier, []).append(lk)
+            # If this is a season-scoped rule, map to the virtual league key if one exists
+            effective_lk = _virtual_by_real.get((lk, season), lk) if season else lk
+            all_assigned = sum(_default_leagues.values(), [])
+            if effective_lk and effective_lk not in all_assigned:
+                _default_leagues.setdefault(tier, []).append(effective_lk)
     config_defaults_js = json.dumps(
         {"teams": _default_teams, "leagues": _default_leagues}, ensure_ascii=True
     ).replace("</", "<\\/")
