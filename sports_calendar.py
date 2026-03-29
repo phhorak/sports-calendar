@@ -1811,7 +1811,6 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
       <option value="America/Denver">MT</option>
       <option value="America/Los_Angeles">PT</option>
       <option value="Europe/London">London</option>
-      <option value="Europe/Amsterdam">Amsterdam</option>
       <option value="Europe/Vienna">Vienna</option>
     </select>
   </div>
@@ -3274,22 +3273,27 @@ function _formatTime(utcMs, tz) {
   } catch(e) { return ''; }
 }
 
+function _applyTZToCards(cards, tz) {
+  cards.forEach(function(el) {
+    var utcMs = parseInt(el.getAttribute('data-utc'), 10);
+    if (!utcMs) return;
+    var state = el.getAttribute('data-state') || 'pre';
+    if (state !== 'pre') return; // live/final text comes from ESPN polling
+    var display = el.querySelector('.game-time-display');
+    if (display) display.textContent = _formatTime(utcMs, tz);
+  });
+}
+
 function applyTimezone(tz) {
   localStorage.setItem('sports_tz', tz);
 
-  // Update all game-time-display spans that have a data-utc on a parent card
-  document.querySelectorAll('[data-utc]').forEach(function(el) {
-    var utcMs = parseInt(el.getAttribute('data-utc'), 10);
-    if (!utcMs) return;
-    // Get state from closest card or self
-    var card = el.closest('[data-state]') || el;
-    var state = card.getAttribute('data-state') || el.getAttribute('data-state') || 'pre';
-    if (state !== 'pre') return; // live/final status text is from ESPN, not a clock time
-    var display = el.querySelector('.game-time-display') || (el.classList.contains('game-time-display') ? el : null);
-    if (display) display.textContent = _formatTime(utcMs, tz);
-  });
+  // Update cards visible in the live DOM
+  _applyTZToCards(Array.from(document.querySelectorAll('[data-utc][data-state]')), tz);
 
-  // Rebuild the static calendar hour slots by the new timezone
+  // Also update the _allCards cache so filterLeagues() clones carry the right times
+  if (_allCards) _applyTZToCards(_allCards, tz);
+
+  // Rebuild the calendar hour slots for the new timezone
   rebuildCalendarTZ(tz);
 }
 
@@ -3313,27 +3317,33 @@ function rebuildCalendarTZ(tz) {
     // Update the time display span within this cloned event
     var timeEl = ev.querySelector('.game-time-display');
     if (timeEl) timeEl.textContent = _formatTime(utcMs, tz);
-    events.push({ hour: hour, el: ev });
+    // Hours 0-5 are "after midnight" — treat as 24-29 so they sort after evening
+    var sortHour = hour < 6 ? hour + 24 : hour;
+    events.push({ hour: hour, sortHour: sortHour, el: ev });
   });
 
   if (!events.length) return;
 
-  var hours = events.map(function(e){ return e.hour; });
-  var minH = Math.max(0, Math.min.apply(null, hours) - 1);
-  var maxH = Math.min(23, Math.max.apply(null, hours) + 1);
+  var sortHours = events.map(function(e){ return e.sortHour; });
+  var minSH = Math.max(6, Math.min.apply(null, sortHours) - 1);
+  var maxSH = Math.min(29, Math.max.apply(null, sortHours) + 1);
 
   var nowHour = parseInt(new Intl.DateTimeFormat('en-US', {
     hour: 'numeric', hour12: false, timeZone: tz
   }).format(new Date()), 10);
 
+  // Sort events so after-midnight ones appear at the bottom
+  var nowSortHour = nowHour < 6 ? nowHour + 24 : nowHour;
+
   var html = '';
-  for (var h = minH; h <= maxH; h++) {
+  for (var sh = minSH; sh <= maxSH; sh++) {
+    var h = sh > 23 ? sh - 24 : sh; // real hour (0-23)
     var ampm = h < 12 ? 'AM' : 'PM';
     var dh = h % 12 || 12;
-    var nowClass = h === nowHour ? ' current-hour' : '';
+    var nowClass = sh === nowSortHour ? ' current-hour' : '';
     var eventsHtml = '';
     events.forEach(function(e) {
-      if (e.hour === h) eventsHtml += e.el.outerHTML;
+      if (e.sortHour === sh) eventsHtml += e.el.outerHTML;
     });
     html += '<div class="cal-hour' + nowClass + '" data-hour="' + h + '">' +
       '<div class="cal-hour-label">' + dh + ' ' + ampm + '</div>' +
