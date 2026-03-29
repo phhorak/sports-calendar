@@ -34,7 +34,6 @@ rules:
   - tier: S
     league: nfl
     teams: [PHI]
-    season: postseason
 
   - tier: S
     league: nba
@@ -59,7 +58,6 @@ rules:
   # ── Tier A ─────────────────────────────────────────────
   - tier: A
     league: nfl
-    season: regular
 
   - tier: A
     league: nba
@@ -67,7 +65,6 @@ rules:
 
   - tier: A
     league: mens-college-basketball
-    season: postseason
 
   - tier: A
     league: college-football
@@ -87,7 +84,7 @@ rules:
 
   - tier: B
     league: wnba
-    
+
   - tier: B
     league: aut.1
     teams: [VIE]
@@ -102,11 +99,9 @@ rules:
 
   - tier: B
     league: college-football
-    teams: [UGA, ALA, OSU, TEX, USC, CLEM, LSU, MICH, ND, OU, PSU, FLA]
 
   - tier: B
     league: mens-college-basketball
-    teams: [DUKE, UNC, UK, KU, GONZ, CONN, ARIZ, HALL, MARQ, VILL, PUR]
 
 # Maps league keys to ESPN API sport/league path segments
 league_map:

@@ -1346,7 +1346,7 @@ def _render_large(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-orig-tier="S" style="{border_style}" onclick="toggleDetail(this, event)">
+    return f"""<div class="game-card large{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-orig-tier="S" style="{border_style}" onclick="toggleDetail(this, event)">
   <div class="game-status"><span class="status-text">{_state_indicator(game["state"])} {_esc(game["time_display"])}</span> {broadcast} {event_type}</div>
   <div class="team-row">
     {logo_away}
@@ -1383,7 +1383,7 @@ def _render_medium(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-orig-tier="A" style="{border_style}" onclick="toggleDetail(this, event)">
+    return f"""<div class="game-card medium{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-orig-tier="A" style="{border_style}" onclick="toggleDetail(this, event)">
   <div class="medium-status"><span class="status-text">{_state_indicator(game["state"])} {_esc(game["time_display"])}</span>{broadcast}{event_type}</div>
   <div class="medium-matchup">
     {logo_away} <span class="abbr">{_esc(game["away_abbr"])}</span>
@@ -1412,7 +1412,7 @@ def _render_compact(game, show_logos, cast_enabled):
 
     details = _detail_links(game, cast_enabled)
 
-    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-orig-tier="B" onclick="toggleDetail(this, event)">
+    return f"""<div class="compact-row{fav_class} expandable" data-league="{_esc(game['league_key'])}" data-home-abbr="{_esc(game['home_abbr'])}" data-away-abbr="{_esc(game['away_abbr'])}" data-game-id="{_esc(game.get('event_id',''))}" data-sport="{_esc(game.get('sport',''))}" data-state="{_esc(game['state'])}" data-season-type="{_esc(str(game.get('season_type','0')))}" data-orig-tier="B" onclick="toggleDetail(this, event)">
   <span class="compact-status"><span class="status-text">{_state_indicator(game["state"])}{_esc(game["time_display"])}</span></span>
   <span class="compact-matchup">{_esc(game["away_abbr"])} @ {_esc(game["home_abbr"])}</span>
   <span class="compact-score">{scores}</span>
@@ -1511,10 +1511,18 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
 
     # ── League list for settings panel ──
     _league_sport_map = {lk: sport for lk, sport, _, _ in ALL_LEAGUES}
-    all_league_keys_js = json.dumps([
+    _league_list_entries = [
         {"key": li["key"], "name": li["display"], "sport": _league_sport_map.get(li["key"], "")}
         for li in (league_info or [])
-    ], ensure_ascii=True).replace("</", "<\\/")
+    ]
+    # Insert virtual nba-playoffs entry right after nba
+    _nba_idx = next((i for i, e in enumerate(_league_list_entries) if e["key"] == "nba"), None)
+    if _nba_idx is not None:
+        _league_list_entries.insert(_nba_idx + 1, {
+            "key": "nba-playoffs", "name": "NBA Playoffs", "sport": "basketball",
+            "virtual": True, "virtualLeague": "nba", "seasonTypes": [3, 4]
+        })
+    all_league_keys_js = json.dumps(_league_list_entries, ensure_ascii=True).replace("</", "<\\/")
 
     # ── Config defaults for settings panel pre-seed ──
     _default_teams = {"S": [], "A": [], "B": []}
@@ -1626,10 +1634,11 @@ def render_html(tiered_games, config, generated_at, errors, all_games_flat,
   <div class="cal-hour-events">{events_html}</div>
 </div>""")
 
-    # Games without times or from other dates
+    # Games without times — only show if they have no date at all (truly timeless),
+    # not games from other dates (e.g. yesterday's F1 results).
     other_games = [
         g for g in all_games_flat
-        if not g.get("game_time") or g["game_time"].date() != today_date
+        if not g.get("game_time")
     ]
     other_html = ""
     if other_games:
@@ -2505,14 +2514,21 @@ function changeDate(delta) {
   goToDate(iso);
 }
 
+var _staticCalendarHTML = null;
+var _staticCalendarDate = null;
+
 function goToDate(dateStr) {
-  // Reload the page with a date parameter
-  // The script generates static HTML, so for other dates we open
-  // ESPN directly or regenerate. For simplicity, we fetch ESPN
-  // scoreboards client-side for non-today dates.
   var today = new Date().toISOString().split('T')[0];
   if (dateStr === today) {
-    location.reload();
+    // Restore the original static calendar content instead of reloading the page
+    var timeline = document.getElementById('cal-timeline');
+    if (timeline && _staticCalendarHTML) {
+      timeline.innerHTML = _staticCalendarHTML;
+    } else if (timeline) {
+      // No cached content yet — capture what's currently there (first load)
+      // This branch shouldn't normally be hit, but fall back gracefully
+      _staticCalendarHTML = timeline.innerHTML;
+    }
     return;
   }
   fetchCalendarForDate(dateStr);
@@ -2690,6 +2706,31 @@ function filterLeagues() {
   });
   var hasPrefs = Object.keys(teamTier).length > 0 || Object.keys(leagueTier).length > 0;
 
+  // Build virtual league map: virtual key -> { realLeague, seasonTypes[] }
+  var virtualLeagues = {};
+  (window.ALL_LEAGUES_LIST||[]).forEach(function(l) {
+    if (l.virtual) {
+      virtualLeagues[l.key] = { realLeague: l.virtualLeague, seasonTypes: l.seasonTypes || [] };
+    }
+  });
+
+  // Resolve the effective league tier for a card, accounting for virtual leagues.
+  // Returns the tier key or undefined.
+  function resolveLeagueTier(league, seasonType) {
+    // Direct match
+    if (leagueTier[league]) return leagueTier[league];
+    // Check if any virtual league covers this real league + season type
+    var bestTier;
+    Object.keys(virtualLeagues).forEach(function(vk) {
+      var vl = virtualLeagues[vk];
+      if (vl.realLeague === league && vl.seasonTypes.indexOf(seasonType) !== -1) {
+        var t = leagueTier[vk];
+        if (t) bestTier = t;
+      }
+    });
+    return bestTier;
+  }
+
   // Sort cards into tier buckets grouped by league
   // buckets[tier][leagueKey] = [cardElement, ...]
   var buckets = { S: {}, A: {}, B: {} };
@@ -2700,6 +2741,7 @@ function filterLeagues() {
 
     var home = card.getAttribute('data-home-abbr') || '';
     var away = card.getAttribute('data-away-abbr') || '';
+    var seasonType = parseInt(card.getAttribute('data-season-type') || '0', 10);
     var tier;
 
     // Never show extra-section cards in My View
@@ -2710,7 +2752,8 @@ function filterLeagues() {
       tier = card.getAttribute('data-orig-tier') || 'B';
     } else {
       // Team pref takes priority over league pref
-      tier = teamTier[home + ':' + league] || teamTier[away + ':' + league] || leagueTier[league];
+      tier = teamTier[home + ':' + league] || teamTier[away + ':' + league]
+             || resolveLeagueTier(league, seasonType);
       if (!tier) return; // not in any pref
     }
 
@@ -2756,11 +2799,11 @@ function filterLeagues() {
 
       cards.forEach(function(origCard) {
         var card = origCard.cloneNode(true);
-        // Re-style card size to match tier
+        // Re-style card size to match tier, but never convert compact-rows to larger cards
         if (!card.classList.contains('compact-row') && !card.classList.contains('f1-card')) {
           if (tier === 'S') { card.classList.remove('medium'); card.classList.add('large'); }
           else if (tier === 'A') { card.classList.remove('large'); card.classList.add('medium'); }
-          else { card.classList.remove('large'); card.classList.add('medium'); }
+          // tier B: leave as-is (compact-row stays compact-row, medium stays medium)
         }
         card.style.display = '';
         grid.appendChild(card);
@@ -3035,6 +3078,7 @@ function renderTierZones() {
       chip.appendChild(rm);
       zone.appendChild(chip);
     });
+
   });
 
   var unassignedZone = document.getElementById('tier-leagues-none');
@@ -3047,6 +3091,12 @@ function renderTierZones() {
       chip.draggable = true;
       chip.addEventListener('dragstart', function(e) { dragLeagueStart(e, league.key); });
       chip.appendChild(document.createTextNode(league.name));
+      if (league.virtual) {
+        var badge = document.createElement('span');
+        badge.style.cssText = 'font-size:0.6rem;opacity:0.6;margin-left:2px';
+        badge.textContent = '(postseason)';
+        chip.appendChild(badge);
+      }
       unassignedZone.appendChild(chip);
     });
   }
@@ -3085,6 +3135,11 @@ function highlightCalendar() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Cache the static server-rendered calendar timeline so we can restore it
+  // when navigating back to today without a full page reload.
+  var timeline = document.getElementById('cal-timeline');
+  if (timeline) _staticCalendarHTML = timeline.innerHTML;
+
   renderTeamSearch();
   renderTierZones();
   filterLeagues();
@@ -3225,8 +3280,16 @@ def main():
         for game in all_games:
             game["stream_url"] = match_stream(game, streams)
 
+    # Only classify games that are scheduled for today — drop games from other
+    # dates (e.g. yesterday's F1 sessions returned by the ESPN API).
+    today_date = datetime.now(local_tz).date()
+    today_games = [
+        g for g in all_games
+        if not g.get("game_time") or g["game_time"].date() == today_date
+    ]
+
     # Classify my games into tiers
-    tiered = classify_games(all_games, config["rules"])
+    tiered = classify_games(today_games, config["rules"])
 
     # Upgrade streamed.pk links to concrete highest-viewer stream links.
     # Performance: resolve only for "My games" (tiered) rather than all fetched games.
@@ -3270,12 +3333,12 @@ def main():
             if upgraded:
                 print(f"  Upgraded {upgraded} stream link(s) to highest-viewer variants")
 
-    # Extra games (from non-config leagues, not classified)
+    # Extra games (from non-config leagues, not classified) — today only
     classified_ids = set()
     for tier in ("S", "A", "B"):
         for g in tiered.get(tier, []):
             classified_ids.add(id(g))
-    extra_games = [g for g in all_games if id(g) not in classified_ids]
+    extra_games = [g for g in today_games if id(g) not in classified_ids]
     extra_games.sort(key=lambda g: g["game_time"] or datetime.max.replace(tzinfo=timezone.utc))
 
     # Flat list for calendar (my games only)
@@ -3290,7 +3353,7 @@ def main():
     league_info = []
     for lk, sport, league, display in ALL_LEAGUES:
         is_mine = lk in my_league_keys
-        game_count = sum(1 for g in all_games if g["league_key"] == lk)
+        game_count = sum(1 for g in today_games if g["league_key"] == lk)
         league_info.append({
             "key": lk, "display": display, "mine": is_mine, "count": game_count,
         })
