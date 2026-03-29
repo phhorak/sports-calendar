@@ -2739,6 +2739,10 @@ function filterLeagues() {
       el.style.display = checked.has(el.getAttribute('data-league')) ? '' : 'none';
     });
     _cleanupGrids(dashboard);
+    var currentTZ = localStorage.getItem('sports_tz') || window.SERVER_TZ || 'America/Los_Angeles';
+    if (currentTZ !== window.SERVER_TZ) {
+      _applyTZToCards(Array.from(dashboard.querySelectorAll('[data-utc][data-state]')), currentTZ);
+    }
     return;
   }
 
@@ -2867,6 +2871,12 @@ function filterLeagues() {
     dashboard.appendChild(frag);
   } else {
     dashboard.innerHTML = '<div class="no-games">No games match your favorites &mdash; try adjusting your tier settings</div>';
+  }
+
+  // Re-apply the selected timezone to any newly rendered cards
+  var currentTZ = localStorage.getItem('sports_tz') || window.SERVER_TZ || 'America/Los_Angeles';
+  if (currentTZ !== window.SERVER_TZ) {
+    _applyTZToCards(Array.from(dashboard.querySelectorAll('[data-utc][data-state]')), currentTZ);
   }
 }
 
@@ -3289,9 +3299,6 @@ function applyTimezone(tz) {
 
   // Update cards visible in the live DOM
   _applyTZToCards(Array.from(document.querySelectorAll('[data-utc][data-state]')), tz);
-
-  // Also update the _allCards cache so filterLeagues() clones carry the right times
-  if (_allCards) _applyTZToCards(_allCards, tz);
 
   // Rebuild the calendar hour slots for the new timezone
   rebuildCalendarTZ(tz);
