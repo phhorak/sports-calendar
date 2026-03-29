@@ -775,7 +775,7 @@ footer {
     <button class="tab active" onclick="switchTab('dashboard', event)">Dashboard</button>
     <button class="tab" onclick="switchTab('calendar', event)">Calendar</button>
   </div>
-  <span class="updated">Updated 9:55 AM PDT</span>
+  <span class="updated">Updated 10:22 AM PDT</span>
 </header>
 <div id="tab-dashboard" class="tab-content active">
 <section class="tier-section tier-a"><div class="league-label"><span class="league-icon">⚾</span> MLB</div>
@@ -1031,12 +1031,12 @@ footer {
 </div>
 <div class="league-label"><span class="league-icon">🏒</span> NHL</div>
 <div class="games-grid tier-b-grid">
-<div class="compact-row expandable" data-league="nhl" data-home-abbr="NYR" data-away-abbr="FLA" data-game-id="401803518" data-sport="hockey" data-state="pre" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text">10:00 AM</span></span>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="NYR" data-away-abbr="FLA" data-game-id="401803518" data-sport="hockey" data-state="in" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="state-dot live"></span>12:12 - 1st</span></span>
   <span class="compact-matchup">FLA @ NYR</span>
-  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-score"><span class="score-away">0</span>-<span class="score-home">0</span></span>
   <span class="compact-extra">Scripps Sports &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401803518/panthers-rangers" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401803518" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/new-york-rangers-vs-florida-panthers-2348049" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401803518" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401803518" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/new-york-rangers-vs-florida-panthers-2348049" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
 <div class="compact-row expandable" data-league="nhl" data-home-abbr="TB" data-away-abbr="NSH" data-game-id="401803519" data-sport="hockey" data-state="pre" data-orig-tier="B" onclick="toggleDetail(this, event)">
   <span class="compact-status"><span class="status-text">2:00 PM</span></span>
@@ -1069,12 +1069,12 @@ footer {
 </div>
 <div class="league-label"><span class="league-icon">🏀</span> NCAAW</div>
 <div class="games-grid tier-b-grid">
-<div class="compact-row expandable" data-league="womens-college-basketball" data-home-abbr="CONN" data-away-abbr="ND" data-game-id="401856584" data-sport="basketball" data-state="pre" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text">10:00 AM</span></span>
+<div class="compact-row expandable" data-league="womens-college-basketball" data-home-abbr="CONN" data-away-abbr="ND" data-game-id="401856584" data-sport="basketball" data-state="in" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="state-dot live"></span>2:13 - 1st</span></span>
   <span class="compact-matchup">ND @ CONN</span>
-  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-score"><span class="score-away">7</span>-<span class="score-home">13</span></span>
   <span class="compact-extra">ABC &middot; TRNMNT</span>
-  <div class="detail-panel"><a href="https://www.espn.com/womens-college-basketball/game/_/gameId/401856584/notre-dame-uconn" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/womens-college-basketball/boxscore/_/gameId/401856584" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/live_ncaa-division-i-championship-women_uconn-notre-dame-live-streaming-1231696071" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/womens-college-basketball/game/_/gameId/401856584" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/womens-college-basketball/boxscore/_/gameId/401856584" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/live_ncaa-division-i-championship-women_uconn-notre-dame-live-streaming-1231696071" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
 <div class="compact-row expandable" data-league="womens-college-basketball" data-home-abbr="UCLA" data-away-abbr="DUKE" data-game-id="401856585" data-sport="basketball" data-state="pre" data-orig-tier="B" onclick="toggleDetail(this, event)">
   <span class="compact-status"><span class="status-text">12:00 PM</span></span>
@@ -1183,10 +1183,10 @@ footer {
   <button onclick="changeDate(1)" class="cal-nav-btn">&rarr;</button>
 </div>
 <div class="cal-timeline" id="cal-timeline">
-<div class="cal-hour current-hour">
+<div class="cal-hour">
   <div class="cal-hour-label">9 AM</div>
   <div class="cal-hour-events"></div>
-</div><div class="cal-hour">
+</div><div class="cal-hour current-hour">
   <div class="cal-hour-label">10 AM</div>
   <div class="cal-hour-events"><div class="cal-event cal-fav cal-pre" style="border-left-color: #e81828;" data-home-abbr="PHI" data-away-abbr="TEX" data-league="mlb">
   <span class="cal-league">MLB</span>
