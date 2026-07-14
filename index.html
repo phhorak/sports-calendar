@@ -739,7 +739,7 @@ footer {
       <div class="sidebar-section-label">My Leagues</div>
       <label class="sidebar-league sidebar-mine"><input type="checkbox" value="nfl" checked onchange="filterLeagues()"> NFL</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="nba" checked onchange="filterLeagues()"> NBA</label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="mlb" checked onchange="filterLeagues()"> MLB</label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="mlb" checked onchange="filterLeagues()"> MLB <span class="sidebar-count">1</span></label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="nhl" checked onchange="filterLeagues()"> NHL</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="wnba" checked onchange="filterLeagues()"> WNBA <span class="sidebar-count">2</span></label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="cfl" checked onchange="filterLeagues()"> CFL</label>
@@ -748,7 +748,7 @@ footer {
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="aut.1" checked onchange="filterLeagues()"> Austrian BL</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="fifa.friendly" checked onchange="filterLeagues()"> Intl Friendly</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="fifa.worldq.uefa" checked onchange="filterLeagues()"> WC Qual UEFA</label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="fifa.world" checked onchange="filterLeagues()"> World Cup</label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="fifa.world" checked onchange="filterLeagues()"> World Cup <span class="sidebar-count">1</span></label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="uefa.euro" checked onchange="filterLeagues()"> Euros</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="uefa.nations" checked onchange="filterLeagues()"> Nations League</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="f1" checked onchange="filterLeagues()"> F1</label>
@@ -774,7 +774,7 @@ footer {
   <div class="header-left">
     <button class="burger" onclick="toggleSidebar()" title="Filter leagues">&#9776;</button>
     <h1>Sports Today</h1>
-    <span class="header-date">Monday, July 13</span>
+    <span class="header-date">Tuesday, July 14</span>
   </div>
   <div class="view-toggle" title="Switch between your personalised view and all games for checked leagues">
     <span class="view-toggle-label">My View</span>
@@ -798,60 +798,97 @@ footer {
       <option value="Europe/Vienna">Vienna</option>
     </select>
   </div>
-  <span class="updated">Updated 10:54 PM PDT</span>
+  <span class="updated">Updated 12:47 AM PDT</span>
 </header>
 <div id="tab-dashboard" class="tab-content active">
 <section class="tier-section tier-b"><div class="league-label"><span class="league-icon">🏀</span> WNBA</div>
 <div class="games-grid tier-b-grid">
-<div class="compact-row expandable" data-league="wnba" data-home-abbr="ATL" data-away-abbr="LA" data-game-id="401857064" data-sport="basketball" data-state="post" data-season-type="2" data-utc="1783983600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">LA @ ATL</span>
-  <span class="compact-score"><span class="score-away">92</span>-<span class="score-home">101</span></span>
-  <span class="compact-extra">USA Net &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857064/sparks-dream" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857064" target="_blank" class="detail-link">Box Score</a></div>
+<div class="compact-row expandable" data-league="wnba" data-home-abbr="CON" data-away-abbr="POR" data-game-id="401857066" data-sport="basketball" data-state="pre" data-season-type="2" data-utc="1784041200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">8:00 AM</span></span></span>
+  <span class="compact-matchup">POR @ CON</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">WNBA League Pass &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857066/fire-sun" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857066" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/connecticut-sun-w-vs-portland-fire-w-basketball-494950" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="wnba" data-home-abbr="MIN" data-away-abbr="PHX" data-game-id="401857065" data-sport="basketball" data-state="post" data-season-type="2" data-utc="1783990800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">PHX @ MIN</span>
-  <span class="compact-score"><span class="score-away">100</span>-<span class="score-home">104</span></span>
-  <span class="compact-extra">Peacock &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857065/mercury-lynx" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857065" target="_blank" class="detail-link">Box Score</a></div>
+<div class="compact-row expandable" data-league="wnba" data-home-abbr="TOR" data-away-abbr="WSH" data-game-id="401857067" data-sport="basketball" data-state="pre" data-season-type="2" data-utc="1784070000000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 PM</span></span></span>
+  <span class="compact-matchup">WSH @ TOR</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">NBA TV &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857067/mystics-tempo" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857067" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/toronto-tempo-w-vs-washington-mystics-w-basketball-494951" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
 </div></section>
-
+<section class="tier-section tier-extra" id="extra-games" data-extra="1" style="display:none;"><div class="league-label"><span class="league-icon">⚽</span> FIFA World Cup</div>
+<div class="games-grid tier-b-grid">
+<div class="compact-row expandable" data-league="fifa.world" data-home-abbr="FRA" data-away-abbr="ESP" data-game-id="760514" data-sport="soccer" data-state="pre" data-season-type="13798" data-utc="1784055600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">12:00 PM</span></span></span>
+  <span class="compact-matchup">ESP @ FRA</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">FOX</span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/760514/spain-france" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/760514" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/france-vs-spain-2528031" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+</div>
+<div class="league-label"><span class="league-icon">⚾</span> MLB</div>
+<div class="games-grid tier-b-grid">
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="NL" data-away-abbr="AL" data-game-id="401817370" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1784073600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">5:00 PM</span></span></span>
+  <span class="compact-matchup">AL @ NL</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">FOX &middot; ALLSTAR</span>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817370/american-national" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817370" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/23768" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+</div></section>
 </div>
 
 <div id="tab-calendar" class="tab-content">
 <div class="cal-nav">
   <button onclick="changeDate(-1)" class="cal-nav-btn">&larr;</button>
-  <input type="date" id="cal-date" value="2026-07-13" onchange="goToDate(this.value)" class="cal-date-input">
+  <input type="date" id="cal-date" value="2026-07-14" onchange="goToDate(this.value)" class="cal-date-input">
   <button onclick="changeDate(1)" class="cal-nav-btn">&rarr;</button>
 </div>
 <div class="cal-timeline" id="cal-timeline">
-<div class="cal-hour" data-hour="15">
+<div class="cal-hour" data-hour="7">
+  <div class="cal-hour-label">7 AM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="8">
+  <div class="cal-hour-label">8 AM</div>
+  <div class="cal-hour-events"><div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="CON" data-away-abbr="POR" data-league="wnba" data-utc="1784041200000">
+  <span class="cal-league">WNBA</span>
+  <span class="cal-label">POR @ CON <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">8:00 AM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/connecticut-sun-w-vs-portland-fire-w-basketball-494950" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+</div></div>
+</div><div class="cal-hour" data-hour="9">
+  <div class="cal-hour-label">9 AM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="10">
+  <div class="cal-hour-label">10 AM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="11">
+  <div class="cal-hour-label">11 AM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="12">
+  <div class="cal-hour-label">12 PM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="13">
+  <div class="cal-hour-label">1 PM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="14">
+  <div class="cal-hour-label">2 PM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="15">
   <div class="cal-hour-label">3 PM</div>
   <div class="cal-hour-events"></div>
 </div><div class="cal-hour" data-hour="16">
   <div class="cal-hour-label">4 PM</div>
-  <div class="cal-hour-events"><div class="cal-event cal-post" style="border-left-color: #93a1a1;" data-home-abbr="ATL" data-away-abbr="LA" data-league="wnba" data-utc="1783983600000">
+  <div class="cal-hour-events"><div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="TOR" data-away-abbr="WSH" data-league="wnba" data-utc="1784070000000">
   <span class="cal-league">WNBA</span>
-  <span class="cal-label">LA @ ATL (92-101)</span>
-  <span class="cal-time game-time-display">Final</span>
-  
+  <span class="cal-label">WSH @ TOR <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">4:00 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/toronto-tempo-w-vs-washington-mystics-w-basketball-494951" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
 </div></div>
 </div><div class="cal-hour" data-hour="17">
   <div class="cal-hour-label">5 PM</div>
-  <div class="cal-hour-events"></div>
-</div><div class="cal-hour" data-hour="18">
-  <div class="cal-hour-label">6 PM</div>
-  <div class="cal-hour-events"><div class="cal-event cal-post" style="border-left-color: #93a1a1;" data-home-abbr="MIN" data-away-abbr="PHX" data-league="wnba" data-utc="1783990800000">
-  <span class="cal-league">WNBA</span>
-  <span class="cal-label">PHX @ MIN (100-104)</span>
-  <span class="cal-time game-time-display">Final</span>
-  
-</div></div>
-</div><div class="cal-hour" data-hour="19">
-  <div class="cal-hour-label">7 PM</div>
   <div class="cal-hour-events"></div>
 </div>
 
