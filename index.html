@@ -737,25 +737,25 @@ footer {
   <div class="sidebar-panel" id="sidebar-panel-leagues" style="display:none">
     <div class="sidebar-section">
       <div class="sidebar-section-label">My Leagues</div>
-      <label class="sidebar-league sidebar-mine"><input type="checkbox" value="nfl" checked onchange="filterLeagues()"> NFL</label>
+      <label class="sidebar-league sidebar-mine"><input type="checkbox" value="nfl" checked onchange="filterLeagues()"> NFL <span class="sidebar-count">1</span></label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="nba" checked onchange="filterLeagues()"> NBA</label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="mlb" checked onchange="filterLeagues()"> MLB <span class="sidebar-count">16</span></label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="nhl" checked onchange="filterLeagues()"> NHL <span class="sidebar-count">4</span></label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="wnba" checked onchange="filterLeagues()"> WNBA <span class="sidebar-count">2</span></label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="mlb" checked onchange="filterLeagues()"> MLB <span class="sidebar-count">12</span></label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="nhl" checked onchange="filterLeagues()"> NHL <span class="sidebar-count">11</span></label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="wnba" checked onchange="filterLeagues()"> WNBA <span class="sidebar-count">5</span></label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="cfl" checked onchange="filterLeagues()"> CFL</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="mens-college-basketball" checked onchange="filterLeagues()"> NCAAM</label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="college-football" checked onchange="filterLeagues()"> NCAAF</label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="college-football" checked onchange="filterLeagues()"> NCAAF <span class="sidebar-count">1</span></label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="aut.1" checked onchange="filterLeagues()"> Austrian BL</label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="fifa.friendly" checked onchange="filterLeagues()"> Intl Friendly <span class="sidebar-count">2</span></label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="fifa.friendly" checked onchange="filterLeagues()"> Intl Friendly <span class="sidebar-count">6</span></label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="fifa.worldq.uefa" checked onchange="filterLeagues()"> WC Qual UEFA</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="fifa.world" checked onchange="filterLeagues()"> World Cup</label>
 <label class="sidebar-league sidebar-mine"><input type="checkbox" value="uefa.euro" checked onchange="filterLeagues()"> Euros</label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="uefa.nations" checked onchange="filterLeagues()"> Nations League</label>
-<label class="sidebar-league sidebar-mine"><input type="checkbox" value="f1" checked onchange="filterLeagues()"> F1</label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="uefa.nations" checked onchange="filterLeagues()"> Nations League <span class="sidebar-count">8</span></label>
+<label class="sidebar-league sidebar-mine"><input type="checkbox" value="f1" checked onchange="filterLeagues()"> F1 <span class="sidebar-count">2</span></label>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-label">Other Leagues</div>
-      <label class="sidebar-league"><input type="checkbox" value="mls"  onchange="filterLeagues()"> MLS <span class="sidebar-count">1</span></label>
+      <label class="sidebar-league"><input type="checkbox" value="mls"  onchange="filterLeagues()"> MLS</label>
 <label class="sidebar-league"><input type="checkbox" value="ufl"  onchange="filterLeagues()"> UFL</label>
 <label class="sidebar-league"><input type="checkbox" value="womens-college-basketball"  onchange="filterLeagues()"> NCAAW</label>
 <label class="sidebar-league"><input type="checkbox" value="eng.1"  onchange="filterLeagues()"> EPL</label>
@@ -774,7 +774,7 @@ footer {
   <div class="header-left">
     <button class="burger" onclick="toggleSidebar()" title="Filter leagues">&#9776;</button>
     <h1>Sports Today</h1>
-    <span class="header-date">Wednesday, September 23</span>
+    <span class="header-date">Thursday, September 24</span>
   </div>
   <div class="view-toggle" title="Switch between your personalised view and all games for checked leagues">
     <span class="view-toggle-label">My View</span>
@@ -798,205 +798,383 @@ footer {
       <option value="Europe/Vienna">Vienna</option>
     </select>
   </div>
-  <span class="updated">Updated 8:32 PM PDT</span>
+  <span class="updated">Updated 1:43 AM PDT</span>
 </header>
 <div id="tab-dashboard" class="tab-content active">
+<section class="tier-section tier-s"><div class="league-label"><span class="league-icon">⚽</span> UEFA Nations League</div>
+<div class="games-grid tier-s-grid">
+<div class="game-card large favorite expandable" data-league="uefa.nations" data-home-abbr="AUT" data-away-abbr="ISR" data-game-id="401861048" data-sport="soccer" data-state="pre" data-season-type="14105" data-utc="1790275500000" data-orig-tier="S" style="border-left: 4px solid #d72b2c;" onclick="toggleDetail(this, event)">
+  <div class="game-status"><span class="status-text"> <span class="game-time-display">11:45 AM</span></span>  </div>
+  <div class="team-row">
+    <img src="https://a.espncdn.com/i/teamlogos/countries/500/isr.png" alt="ISR" class="team-logo" width="32" height="32">
+    <span class="team-name">Israel</span>
+    <span class="record">0-0-0</span>
+    <span class="score score-away" style="display:none"></span>
+  </div>
+  <div class="team-row">
+    <img src="https://a.espncdn.com/i/teamlogos/countries/500/aut.png" alt="AUT" class="team-logo" width="32" height="32">
+    <span class="team-name">Austria</span>
+    <span class="record">0-0-0</span>
+    <span class="score score-home" style="display:none"></span>
+  </div>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401861048/israel-austria" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401861048" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/austria-vs-israel-2442742" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+</div></section>
 <section class="tier-section tier-a"><div class="league-label"><span class="league-icon">⚾</span> MLB</div>
 <div class="games-grid tier-a-grid">
-<div class="game-card medium favorite expandable" data-league="mlb" data-home-abbr="PHI" data-away-abbr="MIL" data-game-id="401817047" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790203200000" data-orig-tier="A" style="border-left: 3px solid #e81828;" onclick="toggleDetail(this, event)">
-  <div class="medium-status"><span class="status-text"><span class="state-dot final"></span> <span class="game-time-display">Final</span></span> &middot; MLB.TV &middot; STD</div>
+<div class="game-card medium favorite expandable" data-league="mlb" data-home-abbr="PHI" data-away-abbr="MIL" data-game-id="401817062" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790287500000" data-orig-tier="A" style="border-left: 3px solid #e81828;" onclick="toggleDetail(this, event)">
+  <div class="medium-status"><span class="status-text"> <span class="game-time-display">3:05 PM</span></span> &middot; MLB.TV &middot; STD</div>
   <div class="medium-matchup">
     <img src="https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/mil.png" alt="MIL" class="team-logo" width="20" height="20"> <span class="abbr">MIL</span>
     <span class="record-sm">99-59</span>
     <span class="at">@</span>
     <img src="https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/phi.png" alt="PHI" class="team-logo" width="20" height="20"> <span class="abbr">PHI</span>
     <span class="record-sm">87-71</span>
-    <span class="medium-score"><span class="score-away">4</span> - <span class="score-home">1</span></span>
+    <span class="medium-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   </div>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817047/brewers-phillies" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817047" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/philadelphia-phillies-vs-milwaukee-brewers-2606526" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817062/brewers-phillies" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817062" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/philadelphia-phillies-vs-milwaukee-brewers-2608242" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+</div>
+<div class="league-label"><span class="league-icon">🏈</span> NFL</div>
+<div class="games-grid tier-a-grid">
+<div class="game-card medium expandable" data-league="nfl" data-home-abbr="GB" data-away-abbr="ATL" data-game-id="401872948" data-sport="football" data-state="pre" data-season-type="2" data-utc="1790295300000" data-orig-tier="A" style="" onclick="toggleDetail(this, event)">
+  <div class="medium-status"><span class="status-text"> <span class="game-time-display">5:15 PM</span></span> &middot; Prime Video &middot; STD</div>
+  <div class="medium-matchup">
+    <img src="https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/atl.png" alt="ATL" class="team-logo" width="20" height="20"> <span class="abbr">ATL</span>
+    <span class="record-sm">0-2</span>
+    <span class="at">@</span>
+    <img src="https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/gb.png" alt="GB" class="team-logo" width="20" height="20"> <span class="abbr">GB</span>
+    <span class="record-sm">1-1</span>
+    <span class="medium-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  </div>
+  <div class="detail-panel"><a href="https://www.espn.com/nfl/game/_/gameId/401872948/falcons-packers" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nfl/boxscore/_/gameId/401872948" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nfl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/green-bay-packers-vs-atlanta-falcons-2475406" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
 </div></section>
-<section class="tier-section tier-b"><div class="league-label"><span class="league-icon">🏀</span> WNBA</div>
+<section class="tier-section tier-b"><div class="league-label"><span class="league-icon">🏒</span> NHL</div>
 <div class="games-grid tier-b-grid">
-<div class="compact-row expandable" data-league="wnba" data-home-abbr="NY" data-away-abbr="ATL" data-game-id="401857213" data-sport="basketball" data-state="post" data-season-type="2" data-utc="1790208000000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">ATL @ NY</span>
-  <span class="compact-score"><span class="score-away">83</span>-<span class="score-home">65</span></span>
-  <span class="compact-extra">USA Net &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857213/dream-liberty" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857213" target="_blank" class="detail-link">Box Score</a></div>
+<div class="compact-row favorite expandable" data-league="nhl" data-home-abbr="PHI" data-away-abbr="BOS" data-game-id="401879363" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790290800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 PM</span></span></span>
+  <span class="compact-matchup">BOS @ PHI</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN+ &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879363/bruins-flyers" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879363" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/philadelphia-flyers-vs-boston-bruins-2498532" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="wnba" data-home-abbr="SEA" data-away-abbr="DAL" data-game-id="401857214" data-sport="basketball" data-state="in" data-season-type="2" data-utc="1790215200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot live"></span><span class="game-time-display">3:28 - 3rd</span></span></span>
-  <span class="compact-matchup">DAL @ SEA</span>
-  <span class="compact-score"><span class="score-away">63</span>-<span class="score-home">55</span></span>
+</div>
+<div class="league-label"><span class="league-icon">🏀</span> WNBA</div>
+<div class="games-grid tier-b-grid">
+<div class="compact-row expandable" data-league="wnba" data-home-abbr="CON" data-away-abbr="TOR" data-game-id="401857215" data-sport="basketball" data-state="pre" data-season-type="2" data-utc="1790290800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 PM</span></span></span>
+  <span class="compact-matchup">TOR @ CON</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">NBA TV &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857215/tempo-sun" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857215" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/connecticut-sun-vs-toronto-tempo-2449336" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="wnba" data-home-abbr="WSH" data-away-abbr="CHI" data-game-id="401857216" data-sport="basketball" data-state="pre" data-season-type="2" data-utc="1790292600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:30 PM</span></span></span>
+  <span class="compact-matchup">CHI @ WSH</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">WNBA League Pass &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857216/sky-mystics" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857216" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/washington-mystics-vs-chicago-sky-2449220" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="wnba" data-home-abbr="MIN" data-away-abbr="IND" data-game-id="401857217" data-sport="basketball" data-state="pre" data-season-type="2" data-utc="1790294400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">5:00 PM</span></span></span>
+  <span class="compact-matchup">IND @ MIN</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra">USA Net &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857214" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857214" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/seattle-storm-vs-dallas-wings-2449219" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857217/fever-lynx" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857217" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/minnesota-lynx-vs-indiana-fever-2449221" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="wnba" data-home-abbr="LA" data-away-abbr="GS" data-game-id="401857218" data-sport="basketball" data-state="pre" data-season-type="2" data-utc="1790301600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">7:00 PM</span></span></span>
+  <span class="compact-matchup">GS @ LA</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">WNBA League Pass &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857218/valkyries-sparks" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857218" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/los-angeles-sparks-vs-golden-state-valkyries-2449222" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="wnba" data-home-abbr="PHX" data-away-abbr="LV" data-game-id="401857219" data-sport="basketball" data-state="pre" data-season-type="2" data-utc="1790301600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">7:00 PM</span></span></span>
+  <span class="compact-matchup">LV @ PHX</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">USA Net &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/wnba/game/_/gameId/401857219/aces-mercury" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/wnba/boxscore/_/gameId/401857219" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/phoenix-mercury-vs-las-vegas-aces-2449223" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+</div>
+<div class="league-label"><span class="league-icon">🏈</span> NCAAF</div>
+<div class="games-grid tier-b-grid">
+<div class="compact-row expandable" data-league="college-football" data-home-abbr="CCU" data-away-abbr="LIB" data-game-id="401869941" data-sport="football" data-state="pre" data-season-type="2" data-utc="1790292600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:30 PM</span></span></span>
+  <span class="compact-matchup">LIB @ CCU</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/college-football/game/_/gameId/401869941/liberty-coastal" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/college-football/boxscore/_/gameId/401869941" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/college-football/standings" target="_blank" class="detail-link">Standings</a></div>
 </div>
 </div></section>
 <section class="tier-section tier-extra" id="extra-games" data-extra="1" style="display:none;"><div class="league-label"><span class="league-icon">⚽</span> Men's International Friendly</div>
 <div class="games-grid tier-b-grid">
-<div class="compact-row expandable" data-league="fifa.friendly" data-home-abbr="AZE" data-away-abbr="TJK" data-game-id="401898013" data-sport="soccer" data-state="post" data-season-type="13708" data-utc="1790179200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">FT</span></span></span>
-  <span class="compact-matchup">TJK @ AZE</span>
-  <span class="compact-score"><span class="score-away">0</span>-<span class="score-home">1</span></span>
+<div class="compact-row expandable" data-league="fifa.friendly" data-home-abbr="PNG" data-away-abbr="NCD" data-game-id="401922332" data-sport="soccer" data-state="pre" data-season-type="13708" data-utc="1790233200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">12:00 AM</span></span></span>
+  <span class="compact-matchup">NCD @ PNG</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra"></span>
-  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401898013/tajikistan-azerbaijan" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401898013" target="_blank" class="detail-link">Box Score</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401922332/new-caledonia-papua-new-guinea" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401922332" target="_blank" class="detail-link">Box Score</a></div>
 </div>
-<div class="compact-row expandable" data-league="fifa.friendly" data-home-abbr="GIB" data-away-abbr="STP" data-game-id="401918083" data-sport="soccer" data-state="post" data-season-type="13708" data-utc="1790179200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">FT</span></span></span>
-  <span class="compact-matchup">STP @ GIB</span>
-  <span class="compact-score"><span class="score-away">0</span>-<span class="score-home">0</span></span>
+<div class="compact-row expandable" data-league="fifa.friendly" data-home-abbr="PLE" data-away-abbr="NZL" data-game-id="401920058" data-sport="soccer" data-state="pre" data-season-type="13708" data-utc="1790242200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">2:30 AM</span></span></span>
+  <span class="compact-matchup">NZL @ PLE</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra"></span>
-  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401918083/sao-tome-and-principe-gibraltar" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401918083" target="_blank" class="detail-link">Box Score</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401920058/new-zealand-palestine" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401920058" target="_blank" class="detail-link">Box Score</a></div>
+</div>
+<div class="compact-row expandable" data-league="fifa.friendly" data-home-abbr="JPN" data-away-abbr="URU" data-game-id="401905330" data-sport="soccer" data-state="pre" data-season-type="13708" data-utc="1790244300000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">3:05 AM</span></span></span>
+  <span class="compact-matchup">URU @ JPN</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401905330/uruguay-japan" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401905330" target="_blank" class="detail-link">Box Score</a></div>
+</div>
+<div class="compact-row expandable" data-league="fifa.friendly" data-home-abbr="KOR" data-away-abbr="ECU" data-game-id="401905196" data-sport="soccer" data-state="pre" data-season-type="13708" data-utc="1790247600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 AM</span></span></span>
+  <span class="compact-matchup">ECU @ KOR</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401905196/ecuador-south-korea" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401905196" target="_blank" class="detail-link">Box Score</a></div>
+</div>
+<div class="compact-row expandable" data-league="fifa.friendly" data-home-abbr="CHN" data-away-abbr="MDV" data-game-id="401914222" data-sport="soccer" data-state="pre" data-season-type="13708" data-utc="1790249700000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:35 AM</span></span></span>
+  <span class="compact-matchup">MDV @ CHN</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401914222/maldives-china" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401914222" target="_blank" class="detail-link">Box Score</a></div>
+</div>
+<div class="compact-row expandable" data-league="fifa.friendly" data-home-abbr="UZB" data-away-abbr="IRN" data-game-id="401915914" data-sport="soccer" data-state="pre" data-season-type="13708" data-utc="1790258400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">7:00 AM</span></span></span>
+  <span class="compact-matchup">IRN @ UZB</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401915914/iran-uzbekistan" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401915914" target="_blank" class="detail-link">Box Score</a></div>
+</div>
+</div>
+<div class="league-label"><span class="league-icon">🏎</span> F1</div>
+<div class="games-grid tier-b-grid">
+<div class="compact-row expandable" data-league="f1" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="state-dot live"></span>In Progress</span>
+  <span class="compact-matchup">Qatar Airways Azerbaijan Grand Prix — FP1</span>
+  <span class="compact-score"></span>
+  <span class="compact-extra">Apple TV</span>
+  
+  <div class="detail-panel"><a href="https://streamed.pk/watch/live-event_formula-1-2026-azerbaijan-gp-live-stream" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="f1" onclick="toggleDetail(this, event)">
+  <span class="compact-status">5:00 AM</span>
+  <span class="compact-matchup">Qatar Airways Azerbaijan Grand Prix — FP2</span>
+  <span class="compact-score"></span>
+  <span class="compact-extra">Apple TV</span>
+  
+  <div class="detail-panel"><a href="https://streamed.pk/watch/live-event_formula-1-2026-azerbaijan-gp-live-stream" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+</div>
+<div class="league-label"><span class="league-icon">⚽</span> UEFA Nations League</div>
+<div class="games-grid tier-b-grid">
+<div class="compact-row expandable" data-league="uefa.nations" data-home-abbr="AND" data-away-abbr="MLT" data-game-id="401861047" data-sport="soccer" data-state="pre" data-season-type="14105" data-utc="1790265600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">9:00 AM</span></span></span>
+  <span class="compact-matchup">MLT @ AND</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401861047/malta-andorra" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401861047" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/andorra-vs-malta-2475285" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="uefa.nations" data-home-abbr="KOS" data-away-abbr="IRL" data-game-id="401861045" data-sport="soccer" data-state="pre" data-season-type="14105" data-utc="1790275500000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:45 AM</span></span></span>
+  <span class="compact-matchup">IRL @ KOS</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401861045/republic-of-ireland-kosovo" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401861045" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/kosovo-vs-ireland-2442743" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="uefa.nations" data-home-abbr="LIE" data-away-abbr="LTU" data-game-id="401861043" data-sport="soccer" data-state="pre" data-season-type="14105" data-utc="1790275500000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:45 AM</span></span></span>
+  <span class="compact-matchup">LTU @ LIE</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401861043/lithuania-liechtenstein" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401861043" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/liechtenstein-vs-lithuania-2442744" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="uefa.nations" data-home-abbr="NED" data-away-abbr="GER" data-game-id="401861041" data-sport="soccer" data-state="pre" data-season-type="14105" data-utc="1790275500000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:45 AM</span></span></span>
+  <span class="compact-matchup">GER @ NED</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401861041/germany-netherlands" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401861041" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/netherlands-vs-germany-2442738" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="uefa.nations" data-home-abbr="NOR" data-away-abbr="DEN" data-game-id="401861046" data-sport="soccer" data-state="pre" data-season-type="14105" data-utc="1790275500000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:45 AM</span></span></span>
+  <span class="compact-matchup">DEN @ NOR</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">FS1</span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401861046/denmark-norway" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401861046" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/norway-vs-denmark-2442741" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="uefa.nations" data-home-abbr="POR" data-away-abbr="WAL" data-game-id="401861044" data-sport="soccer" data-state="pre" data-season-type="14105" data-utc="1790275500000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:45 AM</span></span></span>
+  <span class="compact-matchup">WAL @ POR</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401861044/wales-portugal" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401861044" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/portugal-vs-wales-2442740" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="uefa.nations" data-home-abbr="SRB" data-away-abbr="GRE" data-game-id="401861042" data-sport="soccer" data-state="pre" data-season-type="14105" data-utc="1790275500000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:45 AM</span></span></span>
+  <span class="compact-matchup">GRE @ SRB</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra"></span>
+  <div class="detail-panel"><a href="https://www.espn.com/soccer/match/_/gameId/401861042/greece-serbia" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/401861042" target="_blank" class="detail-link">Box Score</a> <a href="https://streamed.pk/watch/serbia-vs-greece-2442739" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
 </div>
 <div class="league-label"><span class="league-icon">⚾</span> MLB</div>
 <div class="games-grid tier-b-grid">
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="DET" data-away-abbr="WSH" data-game-id="401817051" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790183400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">WSH @ DET</span>
-  <span class="compact-score"><span class="score-away">4</span>-<span class="score-home">2</span></span>
-  <span class="compact-extra">ESPN Unlmtd &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817051/nationals-tigers" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817051" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a></div>
-</div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="BAL" data-away-abbr="TOR" data-game-id="401923610" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790184900000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">TOR @ BAL</span>
-  <span class="compact-score"><span class="score-away">2</span>-<span class="score-home">4</span></span>
-  <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401923610/blue-jays-orioles" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401923610" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a></div>
-</div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="SF" data-away-abbr="MIN" data-game-id="401817058" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790192700000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">MIN @ SF</span>
-  <span class="compact-score"><span class="score-away">4</span>-<span class="score-home">2</span></span>
-  <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817058/twins-giants" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817058" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a></div>
-</div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="BAL" data-away-abbr="TOR" data-game-id="401817050" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790202900000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">TOR @ BAL</span>
-  <span class="compact-score"><span class="score-away">2</span>-<span class="score-home">4</span></span>
-  <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817050/blue-jays-orioles" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817050" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a></div>
-</div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="PIT" data-away-abbr="STL" data-game-id="401817048" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790203200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="PIT" data-away-abbr="STL" data-game-id="401817063" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790267700000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">9:35 AM</span></span></span>
   <span class="compact-matchup">STL @ PIT</span>
-  <span class="compact-score"><span class="score-away">5</span>-<span class="score-home">1</span></span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817048/cardinals-pirates" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817048" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/pittsburgh-pirates-vs-st--louis-cardinals-2606525" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817063/cardinals-pirates" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817063" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/pittsburgh-pirates-vs-st--louis-cardinals-2606537" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="BOS" data-away-abbr="CLE" data-game-id="401817046" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790204400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">CLE @ BOS</span>
-  <span class="compact-score"><span class="score-away">0</span>-<span class="score-home">1</span></span>
-  <span class="compact-extra">ESPN &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817046/guardians-red-sox" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817046" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/boston-red-sox-vs-cleveland-guardians-2606528" target="_blank" class="detail-link stream-link">Stream</a></div>
-</div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="NYY" data-away-abbr="TB" data-game-id="401817049" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790204700000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">TB @ NYY</span>
-  <span class="compact-score"><span class="score-away">2</span>-<span class="score-home">9</span></span>
-  <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817049/rays-yankees" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817049" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/new-york-yankees-vs-tampa-bay-rays-2606527" target="_blank" class="detail-link stream-link">Stream</a></div>
-</div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="ATL" data-away-abbr="CIN" data-game-id="401817045" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790205300000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final/10</span></span></span>
-  <span class="compact-matchup">CIN @ ATL</span>
-  <span class="compact-score"><span class="score-away">2</span>-<span class="score-home">3</span></span>
-  <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817045/reds-braves" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817045" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/atlanta-braves-vs-cincinnati-reds-2606529" target="_blank" class="detail-link stream-link">Stream</a></div>
-</div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="KC" data-away-abbr="CHW" data-game-id="401817052" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790206800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="KC" data-away-abbr="CHW" data-game-id="401817065" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790273400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:10 AM</span></span></span>
   <span class="compact-matchup">CHW @ KC</span>
-  <span class="compact-score"><span class="score-away">4</span>-<span class="score-home">5</span></span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817052/white-sox-royals" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817052" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/kansas-city-royals-vs-chicago-white-sox-2606531" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817065/white-sox-royals" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817065" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/kansas-city-royals-vs-chicago-white-sox-2606538" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="CHC" data-away-abbr="MIA" data-game-id="401817053" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790206800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="CHC" data-away-abbr="MIA" data-game-id="401817066" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790274000000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:20 AM</span></span></span>
   <span class="compact-matchup">MIA @ CHC</span>
-  <span class="compact-score"><span class="score-away">3</span>-<span class="score-home">2</span></span>
-  <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817053/marlins-cubs" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817053" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/chicago-cubs-vs-miami-marlins-2606530" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN Unlmtd &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817066/marlins-cubs" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817066" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/chicago-cubs-vs-miami-marlins-2606539" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="TEX" data-away-abbr="NYM" data-game-id="401817054" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790208300000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="TEX" data-away-abbr="NYM" data-game-id="401817067" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790274900000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">11:35 AM</span></span></span>
   <span class="compact-matchup">NYM @ TEX</span>
-  <span class="compact-score"><span class="score-away">7</span>-<span class="score-home">2</span></span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817054/mets-rangers" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817054" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/texas-rangers-vs-new-york-mets-2606532" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817067/mets-rangers" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817067" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/texas-rangers-vs-new-york-mets-2606540" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="COL" data-away-abbr="ARI" data-game-id="401817055" data-sport="baseball" data-state="post" data-season-type="2" data-utc="1790210400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="COL" data-away-abbr="ARI" data-game-id="401817068" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790277000000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">12:10 PM</span></span></span>
   <span class="compact-matchup">ARI @ COL</span>
-  <span class="compact-score"><span class="score-away">5</span>-<span class="score-home">3</span></span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817055/diamondbacks-rockies" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817055" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/colorado-rockies-vs-arizona-diamondbacks-2606533" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817068/diamondbacks-rockies" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817068" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/colorado-rockies-vs-arizona-diamondbacks-2606533" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="ATH" data-away-abbr="LAA" data-game-id="401817056" data-sport="baseball" data-state="in" data-season-type="2" data-utc="1790214000000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot live"></span><span class="game-time-display">Bot 5th</span></span></span>
-  <span class="compact-matchup">LAA @ ATH</span>
-  <span class="compact-score"><span class="score-away">3</span>-<span class="score-home">5</span></span>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="BOS" data-away-abbr="CLE" data-game-id="401817061" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790289900000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">3:45 PM</span></span></span>
+  <span class="compact-matchup">CLE @ BOS</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817056" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817056" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/athletics-vs-los-angeles-angels-2606534" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817061/guardians-red-sox" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817061" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/boston-red-sox-vs-cleveland-guardians-2608243" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="SEA" data-away-abbr="HOU" data-game-id="401817057" data-sport="baseball" data-state="in" data-season-type="2" data-utc="1790215200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot live"></span><span class="game-time-display">Bot 4th</span></span></span>
-  <span class="compact-matchup">HOU @ SEA</span>
-  <span class="compact-score"><span class="score-away">4</span>-<span class="score-home">3</span></span>
-  <span class="compact-extra">ESPN &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817057" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817057" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/seattle-mariners-vs-houston-astros-2606536" target="_blank" class="detail-link stream-link">Stream</a></div>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="NYY" data-away-abbr="TB" data-game-id="401817064" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790291100000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:05 PM</span></span></span>
+  <span class="compact-matchup">TB @ NYY</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">MLB.TV &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817064/rays-yankees" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817064" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/new-york-yankees-vs-tampa-bay-rays-2608244" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="mlb" data-home-abbr="LAD" data-away-abbr="SD" data-game-id="401817059" data-sport="baseball" data-state="in" data-season-type="2" data-utc="1790215800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot live"></span><span class="game-time-display">Bot 4th</span></span></span>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="ATL" data-away-abbr="CIN" data-game-id="401817060" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790291700000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:15 PM</span></span></span>
+  <span class="compact-matchup">CIN @ ATL</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">MLB.TV &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817060/reds-braves" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817060" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/atlanta-braves-vs-cincinnati-reds-2608245" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="SEA" data-away-abbr="LAA" data-game-id="401817069" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790300400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">6:40 PM</span></span></span>
+  <span class="compact-matchup">LAA @ SEA</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">MLB.TV &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817069/angels-mariners" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817069" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/seattle-mariners-vs-los-angeles-angels-2608246" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="ATH" data-away-abbr="HOU" data-game-id="401817070" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790300400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">6:40 PM</span></span></span>
+  <span class="compact-matchup">HOU @ ATH</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">MLB.TV &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817070/astros-athletics" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817070" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/athletics-vs-houston-astros-2608247" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="mlb" data-home-abbr="LAD" data-away-abbr="SD" data-game-id="401817071" data-sport="baseball" data-state="pre" data-season-type="2" data-utc="1790302200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">7:10 PM</span></span></span>
   <span class="compact-matchup">SD @ LAD</span>
-  <span class="compact-score"><span class="score-away">2</span>-<span class="score-home">0</span></span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra">MLB.TV &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817059" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817059" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/los-angeles-dodgers-vs-san-diego-padres-2606535" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/mlb/game/_/gameId/401817071/padres-dodgers" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/mlb/boxscore/_/gameId/401817071" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/mlb/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/los-angeles-dodgers-vs-san-diego-padres-2606535" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
 </div>
 <div class="league-label"><span class="league-icon">🏒</span> NHL</div>
 <div class="games-grid tier-b-grid">
-<div class="compact-row expandable" data-league="nhl" data-home-abbr="OTT" data-away-abbr="TOR" data-game-id="401879650" data-sport="hockey" data-state="post" data-season-type="1" data-utc="1790204400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">TOR @ OTT</span>
-  <span class="compact-score"><span class="score-away">4</span>-<span class="score-home">2</span></span>
-  <span class="compact-extra">NHL Net &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879650/maple-leafs-senators" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879650" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/ottawa-senators-vs-toronto-maple-leafs-2591466" target="_blank" class="detail-link stream-link">Stream</a></div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="DET" data-away-abbr="BUF" data-game-id="401879452" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790290800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 PM</span></span></span>
+  <span class="compact-matchup">BUF @ DET</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN+ &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879452/sabres-red-wings" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879452" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/detroit-red-wings-vs-buffalo-sabres-2591468" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="nhl" data-home-abbr="TOR" data-away-abbr="OTT" data-game-id="401886441" data-sport="hockey" data-state="post" data-season-type="1" data-utc="1790204400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">OTT @ TOR</span>
-  <span class="compact-score"><span class="score-away">1</span>-<span class="score-home">6</span></span>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="CBJ" data-away-abbr="PIT" data-game-id="401879455" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790290800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 PM</span></span></span>
+  <span class="compact-matchup">PIT @ CBJ</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
   <span class="compact-extra">STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401886441/senators-maple-leafs" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401886441" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/ottawa-senators-vs-toronto-maple-leafs-2591466" target="_blank" class="detail-link stream-link">Stream</a></div>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879455/penguins-blue-jackets" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879455" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/columbus-blue-jackets-vs-pittsburgh-penguins-2591470" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="nhl" data-home-abbr="DAL" data-away-abbr="MIN" data-game-id="401886429" data-sport="hockey" data-state="post" data-season-type="1" data-utc="1790208000000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot final"></span><span class="game-time-display">Final</span></span></span>
-  <span class="compact-matchup">MIN @ DAL</span>
-  <span class="compact-score"><span class="score-away">0</span>-<span class="score-home">2</span></span>
-  <span class="compact-extra">KSTC &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401886429/wild-stars" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401886429" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/dallas-stars-vs-minnesota-wild-2591467" target="_blank" class="detail-link stream-link">Stream</a></div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="NYR" data-away-abbr="NJ" data-game-id="401879646" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790290800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 PM</span></span></span>
+  <span class="compact-matchup">NJ @ NYR</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">MSGSN &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879646/devils-rangers" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879646" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/new-york-rangers-vs-new-jersey-devils-2591471" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="compact-row expandable" data-league="nhl" data-home-abbr="ANA" data-away-abbr="LA" data-game-id="401879369" data-sport="hockey" data-state="in" data-season-type="1" data-utc="1790215200000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot live"></span><span class="game-time-display">8:47 - 2nd</span></span></span>
-  <span class="compact-matchup">LA @ ANA</span>
-  <span class="compact-score"><span class="score-away">2</span>-<span class="score-home">1</span></span>
-  <span class="compact-extra">KCOP &middot; STD</span>
-  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879369" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879369" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/anaheim-ducks-vs-los-angeles-kings-2498530" target="_blank" class="detail-link stream-link">Stream</a></div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="CAR" data-away-abbr="NSH" data-game-id="401879934" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790290800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 PM</span></span></span>
+  <span class="compact-matchup">NSH @ CAR</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN+ &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879934/predators-hurricanes" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879934" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/carolina-hurricanes-vs-nashville-predators-2591469" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="TB" data-away-abbr="FLA" data-game-id="401881133" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790290800000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">4:00 PM</span></span></span>
+  <span class="compact-matchup">FLA @ TB</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN+ &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401881133/panthers-lightning" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401881133" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/tampa-bay-lightning-vs-florida-panthers-2591472" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
-<div class="league-label"><span class="league-icon">⚽</span> MLS</div>
-<div class="games-grid tier-b-grid">
-<div class="compact-row expandable" data-league="mls" data-home-abbr="SEA" data-away-abbr="RSL" data-game-id="761543" data-sport="soccer" data-state="in" data-season-type="13846" data-utc="1790213400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
-  <span class="compact-status"><span class="status-text"><span class="state-dot live"></span><span class="game-time-display">90'+5'</span></span></span>
-  <span class="compact-matchup">RSL @ SEA</span>
-  <span class="compact-score"><span class="score-away">0</span>-<span class="score-home">2</span></span>
-  <span class="compact-extra">Apple TV</span>
-  <div class="detail-panel"><a href="https://www.espn.com/soccer/game/_/gameId/761543" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/soccer/boxscore/_/gameId/761543" target="_blank" class="detail-link">Box Score</a></div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="STL" data-away-abbr="CHI" data-game-id="401886260" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790294400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">5:00 PM</span></span></span>
+  <span class="compact-matchup">CHI @ STL</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN+ &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401886260/blackhawks-blues" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401886260" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/st--louis-blues-vs-chicago-blackhawks-2591473" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="VAN" data-away-abbr="EDM" data-game-id="401878103" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790298000000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">6:00 PM</span></span></span>
+  <span class="compact-matchup">EDM @ VAN</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN+ &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401878103/oilers-canucks" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401878103" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/vancouver-canucks-vs-edmonton-oilers-2498533" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="SEA" data-away-abbr="CGY" data-game-id="401879332" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790300400000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">6:40 PM</span></span></span>
+  <span class="compact-matchup">CGY @ SEA</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">ESPN+ &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879332/flames-kraken" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879332" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/seattle-kraken-vs-calgary-flames-2498535" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="VGK" data-away-abbr="UTA" data-game-id="401879367" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790301600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">7:00 PM</span></span></span>
+  <span class="compact-matchup">UTA @ VGK</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">Scripps Sports &middot; STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879367/mammoth-golden-knights" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879367" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/vegas-golden-knights-vs-utah-mammoth-2498531" target="_blank" class="detail-link stream-link">Stream</a></div>
+</div>
+<div class="compact-row expandable" data-league="nhl" data-home-abbr="SJ" data-away-abbr="ANA" data-game-id="401879370" data-sport="hockey" data-state="pre" data-season-type="1" data-utc="1790301600000" data-orig-tier="B" onclick="toggleDetail(this, event)">
+  <span class="compact-status"><span class="status-text"><span class="game-time-display">7:00 PM</span></span></span>
+  <span class="compact-matchup">ANA @ SJ</span>
+  <span class="compact-score"><span class="score-away" style="display:none"></span><span class="score-home" style="display:none"></span></span>
+  <span class="compact-extra">STD</span>
+  <div class="detail-panel"><a href="https://www.espn.com/nhl/game/_/gameId/401879370/ducks-sharks" target="_blank" class="detail-link">Gamecast</a> <a href="https://www.espn.com/nhl/boxscore/_/gameId/401879370" target="_blank" class="detail-link">Box Score</a> <a href="https://www.espn.com/nhl/standings" target="_blank" class="detail-link">Standings</a> <a href="https://streamed.pk/watch/san-jose-sharks-vs-anaheim-ducks-2498534" target="_blank" class="detail-link stream-link">Stream</a></div>
 </div>
 </div></section>
 </div>
@@ -1004,44 +1182,96 @@ footer {
 <div id="tab-calendar" class="tab-content">
 <div class="cal-nav">
   <button onclick="changeDate(-1)" class="cal-nav-btn">&larr;</button>
-  <input type="date" id="cal-date" value="2026-09-23" onchange="goToDate(this.value)" class="cal-date-input">
+  <input type="date" id="cal-date" value="2026-09-24" onchange="goToDate(this.value)" class="cal-date-input">
   <button onclick="changeDate(1)" class="cal-nav-btn">&rarr;</button>
 </div>
 <div class="cal-timeline" id="cal-timeline">
-<div class="cal-hour" data-hour="14">
+<div class="cal-hour" data-hour="10">
+  <div class="cal-hour-label">10 AM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="11">
+  <div class="cal-hour-label">11 AM</div>
+  <div class="cal-hour-events"><div class="cal-event cal-fav cal-pre" style="border-left-color: #d72b2c;" data-home-abbr="AUT" data-away-abbr="ISR" data-league="uefa.nations" data-utc="1790275500000">
+  <span class="cal-league">UEFA Nations League</span>
+  <span class="cal-label">ISR @ AUT <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">11:45 AM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/austria-vs-israel-2442742" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+</div></div>
+</div><div class="cal-hour" data-hour="12">
+  <div class="cal-hour-label">12 PM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="13">
+  <div class="cal-hour-label">1 PM</div>
+  <div class="cal-hour-events"></div>
+</div><div class="cal-hour" data-hour="14">
   <div class="cal-hour-label">2 PM</div>
   <div class="cal-hour-events"></div>
 </div><div class="cal-hour" data-hour="15">
   <div class="cal-hour-label">3 PM</div>
-  <div class="cal-hour-events"><div class="cal-event cal-fav cal-post" style="border-left-color: #e81828;" data-home-abbr="PHI" data-away-abbr="MIL" data-league="mlb" data-utc="1790203200000">
+  <div class="cal-hour-events"><div class="cal-event cal-fav cal-pre" style="border-left-color: #e81828;" data-home-abbr="PHI" data-away-abbr="MIL" data-league="mlb" data-utc="1790287500000">
   <span class="cal-league">MLB</span>
-  <span class="cal-label">MIL @ PHI (4-1) <span class="cal-stream" title="Stream available">&#9654;</span></span>
-  <span class="cal-time game-time-display">Final</span>
-  <span class="cal-actions"><a href="https://streamed.pk/watch/philadelphia-phillies-vs-milwaukee-brewers-2606526" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+  <span class="cal-label">MIL @ PHI <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">3:05 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/philadelphia-phillies-vs-milwaukee-brewers-2608242" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
 </div></div>
 </div><div class="cal-hour" data-hour="16">
   <div class="cal-hour-label">4 PM</div>
-  <div class="cal-hour-events"></div>
+  <div class="cal-hour-events"><div class="cal-event cal-fav cal-pre" style="border-left-color: #fe5823;" data-home-abbr="PHI" data-away-abbr="BOS" data-league="nhl" data-utc="1790290800000">
+  <span class="cal-league">NHL</span>
+  <span class="cal-label">BOS @ PHI <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">4:00 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/philadelphia-flyers-vs-boston-bruins-2498532" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+</div>
+<div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="CON" data-away-abbr="TOR" data-league="wnba" data-utc="1790290800000">
+  <span class="cal-league">WNBA</span>
+  <span class="cal-label">TOR @ CON <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">4:00 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/connecticut-sun-vs-toronto-tempo-2449336" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+</div>
+<div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="CCU" data-away-abbr="LIB" data-league="college-football" data-utc="1790292600000">
+  <span class="cal-league">NCAAF</span>
+  <span class="cal-label">LIB @ CCU</span>
+  <span class="cal-time game-time-display">4:30 PM</span>
+  
+</div>
+<div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="WSH" data-away-abbr="CHI" data-league="wnba" data-utc="1790292600000">
+  <span class="cal-league">WNBA</span>
+  <span class="cal-label">CHI @ WSH <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">4:30 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/washington-mystics-vs-chicago-sky-2449220" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+</div></div>
 </div><div class="cal-hour" data-hour="17">
   <div class="cal-hour-label">5 PM</div>
-  <div class="cal-hour-events"><div class="cal-event cal-post" style="border-left-color: #93a1a1;" data-home-abbr="NY" data-away-abbr="ATL" data-league="wnba" data-utc="1790208000000">
+  <div class="cal-hour-events"><div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="MIN" data-away-abbr="IND" data-league="wnba" data-utc="1790294400000">
   <span class="cal-league">WNBA</span>
-  <span class="cal-label">ATL @ NY (83-65)</span>
-  <span class="cal-time game-time-display">Final</span>
-  
+  <span class="cal-label">IND @ MIN <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">5:00 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/minnesota-lynx-vs-indiana-fever-2449221" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+</div>
+<div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="GB" data-away-abbr="ATL" data-league="nfl" data-utc="1790295300000">
+  <span class="cal-league">NFL</span>
+  <span class="cal-label">ATL @ GB <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">5:15 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/green-bay-packers-vs-atlanta-falcons-2475406" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
 </div></div>
 </div><div class="cal-hour" data-hour="18">
   <div class="cal-hour-label">6 PM</div>
   <div class="cal-hour-events"></div>
 </div><div class="cal-hour" data-hour="19">
   <div class="cal-hour-label">7 PM</div>
-  <div class="cal-hour-events"><div class="cal-event cal-in" style="border-left-color: #93a1a1;" data-home-abbr="SEA" data-away-abbr="DAL" data-league="wnba" data-utc="1790215200000">
+  <div class="cal-hour-events"><div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="LA" data-away-abbr="GS" data-league="wnba" data-utc="1790301600000">
   <span class="cal-league">WNBA</span>
-  <span class="cal-label">DAL @ SEA (63-55) <span class="cal-stream" title="Stream available">&#9654;</span></span>
-  <span class="cal-time game-time-display">3:28 - 3rd</span>
-  <span class="cal-actions"><a href="https://streamed.pk/watch/seattle-storm-vs-dallas-wings-2449219" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+  <span class="cal-label">GS @ LA <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">7:00 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/los-angeles-sparks-vs-golden-state-valkyries-2449222" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
+</div>
+<div class="cal-event cal-pre" style="border-left-color: #93a1a1;" data-home-abbr="PHX" data-away-abbr="LV" data-league="wnba" data-utc="1790301600000">
+  <span class="cal-league">WNBA</span>
+  <span class="cal-label">LV @ PHX <span class="cal-stream" title="Stream available">&#9654;</span></span>
+  <span class="cal-time game-time-display">7:00 PM</span>
+  <span class="cal-actions"><a href="https://streamed.pk/watch/phoenix-mercury-vs-las-vegas-aces-2449223" target="_blank" class="cal-action cal-action-stream" onclick="event.stopPropagation()">Stream</a></span>
 </div></div>
-</div><div class="cal-hour current-hour" data-hour="20">
+</div><div class="cal-hour" data-hour="20">
   <div class="cal-hour-label">8 PM</div>
   <div class="cal-hour-events"></div>
 </div>
